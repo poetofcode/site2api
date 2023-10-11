@@ -1,7 +1,17 @@
 const app = require('./app').app;
 
 const config = {
-	port: 3000
-}
+	port: 3000,
+	db: {
+		name: "site2api"
+	}
+};
 
-app.start(config);
+(async () => {
+	try {
+		await app.start(config);
+	    console.log("Сервер ожидает подключения...");
+	} catch(err) {
+	    return console.log(err);
+	} 
+})();
