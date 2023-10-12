@@ -1,10 +1,9 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
-const objectId = require("mongodb").ObjectId;
+// const objectId = require("mongodb").ObjectId;
 const repository = require('./repository')
 
 const app = express();
-const jsonParser = express.json();
 const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
 
 class Application {
