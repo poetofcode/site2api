@@ -1,8 +1,6 @@
 class ProjectRepository {
 
 	async createProject(req, res) {
-		console.log(req);
-
 		if(!req.body) {
 			console.log(1);
 			return res.sendStatus(400);
