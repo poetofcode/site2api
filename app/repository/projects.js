@@ -2,18 +2,15 @@ class ProjectRepository {
 
 	async createProject(req, res) {
 		if(!req.body) {
-			console.log(1);
 			return res.sendStatus(400);
 		}
 	    const collection = req.app.locals.db.collection("projects");
 		const name = req.body.name;
 		const baseUrl = req.body.baseUrl;
 		if (!name || name == 'undefined') {
-			console.log(2);
 			return res.sendStatus(400);
 		}
 		if (!baseUrl || baseUrl == 'undefined') {
-			console.log(3);
 			return res.sendStatus(400);
 		}
 		const project = { 
