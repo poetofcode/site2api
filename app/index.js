@@ -10,6 +10,7 @@ class Application {
 	constructor() {
 		this.projectRepository = new repository.ProjectRepository();
 		this.snippetRepository = new repository.SnippetRepository();
+		this.endpointRepository = new repository.EndpointRepository();
 	}
 
 	async start(config) {
@@ -29,6 +30,9 @@ class Application {
 		app.get('/api/v1/snippets', this.snippetRepository.fetchSnippets);
 		app.post('/api/v1/snippets', this.snippetRepository.createSnippet);
 		app.patch('/api/v1/snippets/:id', this.snippetRepository.updateSnippet);
+		app.get('/api/v1/projects/:projectId/endpoints', this.endpointRepository.fetchEndpoints);
+		app.post('/api/v1/projects/:projectId/endpoints', this.endpointRepository.createEndpoint);
+		app.patch('/api/v1/projects/:projectId/endpoints/:id', this.endpointRepository.updateEndpoint);
 	}
 
 }
