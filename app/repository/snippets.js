@@ -29,7 +29,6 @@ class SnippetRepository {
 	}
 
 	async fetchSnippets(req, res) {
-		console.log(1);
 		res.send({});
 	}
 
