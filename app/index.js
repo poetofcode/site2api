@@ -2,6 +2,8 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 const repository = require('./repository')
 const { utils } = require('./utils');
+const parser = require('./parser').parser;
+
 const app = express();
 const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
 
@@ -23,7 +25,8 @@ class Application {
 
 	initAPI() {
 	    app.use(utils.logger());
-		app.use(express.json())
+		app.use(express.json());
+		app.use(parser());
 		app.get('/api/v1/projects', this.projectRepository.fetchProjects);
 		app.post('/api/v1/projects', this.projectRepository.createProject);
 		app.get('/api/v1/snippets', this.snippetRepository.fetchSnippets);
@@ -32,7 +35,7 @@ class Application {
 		app.get('/api/v1/projects/:projectId/endpoints', this.endpointRepository.fetchEndpoints);
 		app.post('/api/v1/projects/:projectId/endpoints', this.endpointRepository.createEndpoint);
 		app.patch('/api/v1/projects/:projectId/endpoints/:id', this.endpointRepository.updateEndpoint);
-	}
+	}	
 
 }
 
