@@ -26,7 +26,7 @@ class Application {
 	initAPI() {
 	    app.use(utils.logger());
 		app.use(express.json());
-		app.use(parser());
+		app.use('/site/*', parser(this.getDb()));
 		app.get('/api/v1/projects', this.projectRepository.fetchProjects);
 		app.post('/api/v1/projects', this.projectRepository.createProject);
 		app.get('/api/v1/snippets', this.snippetRepository.fetchSnippets);
@@ -37,6 +37,9 @@ class Application {
 		app.patch('/api/v1/projects/:projectId/endpoints/:id', this.endpointRepository.updateEndpoint);
 	}	
 
+	getDb() {
+		return app.locals.db;
+	}
 }
 
 

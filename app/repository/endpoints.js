@@ -86,6 +86,13 @@ class EndpointRepository {
 		res.send({});
 	}
 
+	async fetchEndpointsAll(db) {
+	    const collection = db.collection("endpoints");
+		const snippetCollection = db.collection('snippets');
+		const projectCollection = db.collection('projects');
+
+		return ["111", "222"];
+	}
 }
 
 exports.EndpointRepository = EndpointRepository;
