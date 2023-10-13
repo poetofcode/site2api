@@ -1,6 +1,5 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
-// const objectId = require("mongodb").ObjectId;
 const repository = require('./repository')
 const { utils } = require('./utils');
 const app = express();
@@ -29,6 +28,7 @@ class Application {
 		app.post('/api/v1/projects', this.projectRepository.createProject);
 		app.get('/api/v1/snippets', this.snippetRepository.fetchSnippets);
 		app.post('/api/v1/snippets', this.snippetRepository.createSnippet);
+		app.patch('/api/v1/snippets/:id', this.snippetRepository.updateSnippet);
 	}
 
 }
