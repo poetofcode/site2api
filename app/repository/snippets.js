@@ -6,25 +6,33 @@ class SnippetRepository {
 		}
 	    const collection = req.app.locals.db.collection("snippets");
 		const name = req.body.name;
-		const baseUrl = req.body.baseUrl;
-		if (!name || name == 'undefined') {
-			return res.sendStatus(400);
+		const endpointId = req.body.endpointId;
+		const projectId = req.body.projectId;
+		const code = req.body.code;
+
+		if (!code || code == 'undefined') {
+			return res.status(400).send('Field "code" undefined');
 		}
-		if (!baseUrl || baseUrl == 'undefined') {
-			return res.sendStatus(400);
+
+		const snippet = {
+			code: code
+		};
+		if (name && name != 'undefined') {
+			snippet.name = name;
 		}
-		const project = { 
-			name: name,
-			baseUrl: baseUrl
+		if (endpointId && endpointId != 'undefined') {
+			snippet.endpointId = endpointId;
+		}
+		if (projectId && projectId != 'undefined') {
+			snippet.projectId = projectId;
 		}
 
 	    try{
-	        const projects = await collection.insertOne(project);
-	        res.send(project);
+	        await collection.insertOne(snippet);
+	        res.send(snippet);
 	    }
 	    catch(err){
-	        console.log(err);
-	        res.sendStatus(500);
+	        res.status(500).send(err);
 	    }      
 	}
 
