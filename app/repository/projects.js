@@ -29,7 +29,7 @@ class ProjectRepository {
 	}
 
 	async fetchProjects(req, res) {
-	    const collection = req.app.locals.collection;
+	    const collection = req.app.locals.db.collection("projects");
 	    try{
 	        const projects = await collection.find({}).toArray();
 	        res.send(projects);

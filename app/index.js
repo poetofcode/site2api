@@ -16,7 +16,6 @@ class Application {
 	async start(config) {
 		this.config = config;
         await mongoClient.connect();
-        app.locals.collection = mongoClient.db(this.config.db.name).collection("projects");
         app.locals.db = mongoClient.db(this.config.db.name);
         this.initAPI();
         return app.listen(this.config.port);
