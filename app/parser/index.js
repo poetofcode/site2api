@@ -1,5 +1,10 @@
 const repository = require('../repository')
 
+const codeLayout = `(function() {
+	{{snippet}}
+	return process;
+})();
+`;
 
 function parser(db) {
 	return async(req, res, next) => {
@@ -16,22 +21,37 @@ function parser(db) {
 			const filtered = endpoints.filter((endpoint) => req.method === endpoint.method.toUpperCase());
 			const found = filtered.find((item) => {
 				const itemPath = `/site/${item.project.baseUrl}/${item.url}`;
+
+				console.log(`itemPath = ${itemPath}`);
+
 				return itemPath === reqPath;
 			});
 
-			if (!found || found != 'undefined') {
+			if (!found || found == 'undefined') {
+				console.log('NOT FOUND');
 				return next();
+			} else {
+				console.log('FOUND');
 			}
 
+			// Процессим код из сниппетов найденного endpoint
+			const snippetFuncs = found.snippets.map((snippet) => {
+				const wrappedCode = codeLayout.replace('{{snippet}}', snippet.code);
+				console.log(wrappedCode);
+				return eval(wrappedCode);
+			});
 
-			// TODO process code from snippets
+			let _params = {
+				// TODO fill
+			};
+			await Promise.all(snippetFuncs.map(async (func) => {
+				_params.result = await func(_params);
+			}));
 
+			console.log(_params);
 
-	        if (reqPath === '/site/temp' && req.method === 'GET') {
-	            res.send('MATCH !');
-	        } else {
-	            next();
-	        }
+			return res.send(_params.result);
+
 		} catch (err) {
 			console.log(err);
 			return res.status(500).send(err);
