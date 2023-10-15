@@ -4,8 +4,13 @@ const repository = require('../repository')
 function parser(db) {
 	return async(req, res, next) => {
 		const endpointRepository = new repository.EndpointRepository();
-		const endpoints = await endpointRepository.fetchEndpointsAll(db);
-		console.log(endpoints);
+		try {
+			const endpoints = await endpointRepository.fetchEndpointsAll(db);
+			console.log(endpoints);
+		} catch (err) {
+			console.log(err);
+			return res.status(500).send(err);
+		}
 
 		const reqPath = req.baseUrl; 
 

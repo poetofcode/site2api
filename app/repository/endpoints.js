@@ -78,6 +78,7 @@ class EndpointRepository {
 	        res.send(endpoint);
 	    } 
 	    catch(err){
+	    	console.log(err);
 	        res.status(500).send(err);
 	    }      		
 	}
@@ -91,7 +92,22 @@ class EndpointRepository {
 		const snippetCollection = db.collection('snippets');
 		const projectCollection = db.collection('projects');
 
-		return ["111", "222"];
+		const endpoints = await collection.find({}).toArray();
+
+		const endpointsFull = endpoints.map(async (item) => {
+			const snippetsByItem = await snippetCollection.find({ _id: { $in : item.snippets } }).toArray();
+			const projectByEndpoint = await projectCollection.findOne({ _id: item.projectId });
+			item.snippets = snippetsByItem;
+			item.project = projectByEndpoint;
+			return item;
+		});
+
+		return await Promise.all(endpointsFull);
+	}
+
+	log(arr, title) {
+		console.log(`================ ${title}:`);
+		console.log(arr);
 	}
 }
 
