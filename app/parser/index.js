@@ -9,7 +9,7 @@ const codeLayout = `(function() {
 `;
 
 // Система роутинга
-const routes = [];
+let routes = [];
 
 function matchRoute(path) {
     for (const route of routes) {
@@ -64,6 +64,7 @@ function parser(db) {
 		const endpointRepository = new repository.EndpointRepository();
 		try {
 			const endpoints = await endpointRepository.fetchEndpointsAll(db);
+			routes = [];
 			endpoints.forEach((item) => {
 				const itemPath = `/site/${item.project.baseUrl}/${item.url}`;
 				const method = item.method.toUpperCase();
