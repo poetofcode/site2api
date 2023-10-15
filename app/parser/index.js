@@ -8,49 +8,97 @@ const codeLayout = `(function() {
 })();
 `;
 
+// Система роутинга
+const routes = [];
+
+function matchRoute(path) {
+    for (const route of routes) {
+        const match = route.pattern.exec(path);
+        if (match) {
+            const params = {};
+            match.slice(1).forEach((value, index) => {
+                params[route.keys[index]] = value;
+            });
+            return { endpoint: route.endpoint, params };
+        }
+    }
+    return null;
+}
+
+function parseQueryString(queryString) {
+    const params = {};
+    queryString.split('&').forEach(part => {
+        const [key, value] = part.split('=').map(decodeURIComponent);
+        params[key] = value;
+    });
+    return params;
+}
+
+function registerRoute(method, path, endpoint) {
+    const tokens = path.split('/').slice(1);
+    const patternParts = [];
+    const keys = [];
+    tokens.forEach(token => {
+        if (token.startsWith(':')) {
+            keys.push(token.slice(1));
+            patternParts.push('([^/]+)');
+        } else {
+            patternParts.push(token);
+        }
+    });
+    const pattern = new RegExp('^/' + patternParts.join('/') + '$');
+    routes.push({
+        pattern,
+        keys,
+        endpoint: endpoint,
+        method
+    });
+}
+
 function parser(db) {
 	return async(req, res, next) => {
-		const reqPath = req.baseUrl;
+		const reqPath = req.originalUrl;
 		if (!reqPath.startsWith('/site')) {
 			return next();
 		}
 		const endpointRepository = new repository.EndpointRepository();
 		try {
 			const endpoints = await endpointRepository.fetchEndpointsAll(db);
-			console.log(endpoints);
-
-			// Фильтруем эндпоинты по методам
-			const filtered = endpoints.filter((endpoint) => req.method === endpoint.method.toUpperCase());
-			const found = filtered.find((item) => {
+			endpoints.forEach((item) => {
 				const itemPath = `/site/${item.project.baseUrl}/${item.url}`;
-
-				console.log(`itemPath = ${itemPath}`);
-
-				return itemPath === reqPath;
+				const method = item.method.toUpperCase();
+				registerRoute(method, itemPath, item);
 			});
 
-			if (!found || found == 'undefined') {
-				console.log('NOT FOUND');
-				return next();
-			} else {
-				console.log('FOUND');
-			}
+			console.log(routes);
 
+		    const [path, queryString] = reqPath.split('?');
+		    const routeMatch = matchRoute(path);
+		    if (!routeMatch) {
+	    		console.log("No found matching route");
+	    		return next();	
+		    } else {
+		    	console.log('Found route');
+		    	console.log(routeMatch);
+		    }
+
+	        const parsedParams = routeMatch.params;
+	        const parsedQuery = queryString ? parseQueryString(queryString) : {};
+	        
 			// Процессим код из сниппетов найденного endpoint
+			const found = routeMatch.endpoint;
 			const snippetFuncs = found.snippets.map((snippet) => {
 				const wrappedCode = codeLayout.replace('{{snippet}}', snippet.code);
-				console.log(wrappedCode);
 				return eval(wrappedCode);
 			});
 
 			let _params = {
-				// TODO fill
+				params: parsedParams,
+				query: parsedQuery,
 			};
 			await Promise.all(snippetFuncs.map(async (func) => {
 				_params.result = await func(_params);
 			}));
-
-			console.log(_params);
 
 			return res.send(_params.result);
 
