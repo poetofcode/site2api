@@ -5,6 +5,7 @@ const { utils } = require('./utils');
 const parser = require('./parser').parser;
 
 const app = express();
+const apiRouter = express.Router();
 const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
 
 class Application {
@@ -27,14 +28,15 @@ class Application {
 	    app.use(utils.logger());
 		app.use(express.json());
 		app.use('/site/*', parser(this.getDb()));
-		app.get('/api/v1/projects', this.projectRepository.fetchProjects);
-		app.post('/api/v1/projects', this.projectRepository.createProject);
-		app.get('/api/v1/snippets', this.snippetRepository.fetchSnippets);
-		app.post('/api/v1/snippets', this.snippetRepository.createSnippet);
-		app.patch('/api/v1/snippets/:id', this.snippetRepository.updateSnippet);
-		app.get('/api/v1/projects/:projectId/endpoints', this.endpointRepository.fetchEndpoints);
-		app.post('/api/v1/projects/:projectId/endpoints', this.endpointRepository.createEndpoint);
-		app.patch('/api/v1/projects/:projectId/endpoints/:id', this.endpointRepository.updateEndpoint);
+		apiRouter.get('/projects', this.projectRepository.fetchProjects);
+		apiRouter.post('/projects', this.projectRepository.createProject);
+		apiRouter.get('/snippets', this.snippetRepository.fetchSnippets);
+		apiRouter.post('/snippets', this.snippetRepository.createSnippet);
+		apiRouter.patch('/snippets/:id', this.snippetRepository.updateSnippet);
+		apiRouter.get('/projects/:projectId/endpoints', this.endpointRepository.fetchEndpoints);
+		apiRouter.post('/projects/:projectId/endpoints', this.endpointRepository.createEndpoint);
+		apiRouter.patch('/projects/:projectId/endpoints/:id', this.endpointRepository.updateEndpoint);
+		app.use('/api/v1', apiRouter);
 	}	
 
 	getDb() {
