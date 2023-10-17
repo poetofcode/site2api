@@ -1,15 +1,26 @@
+const repository = require('../repository');
+
 class ProjectMiddleware {
 
-	constructor(db) {
-		this.db = db;
+	constructor(context) {
+		this.projectRepository = new repository.ProjectRepository(context);
+		console.log(repository);
+		console.log(this.projectRepository);
 	}
 
-	list(req, res) {
-		res.render("projects.hbs");
+	list() {
+		return async(req, res) => {
+			console.log('Projects ---------------------------');
+			console.log(await this.projectRepository.fetchProjectsAll());
+			console.log('Projects end -----------------------');
+			res.render("projects.hbs", this.projectRepository.fetchProjectsAll());
+		}
 	}
 
-	edit(req, res) {
-
+	edit() {
+		return async(req, res) => {
+			// TODO
+		}
 	}
 
 }

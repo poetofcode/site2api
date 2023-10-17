@@ -1,11 +1,13 @@
 class EndpointMiddleware {
 
-	constructor(db) {
-		this.db = db;
+	constructor(context) {
+		this.db = context.getDb();
 	}
 
-	list(req, res) {
-		res.render("endpoints.hbs");
+	list() {
+		return async(req, res) => {
+			res.render("endpoints.hbs");
+		}
 	}
 
 	edit(req, res) {
