@@ -10,10 +10,8 @@ class ProjectMiddleware {
 
 	list() {
 		return async(req, res) => {
-			console.log('Projects ---------------------------');
-			console.log(await this.projectRepository.fetchProjectsAll());
-			console.log('Projects end -----------------------');
-			res.render("projects.hbs", this.projectRepository.fetchProjectsAll());
+			const projects = await this.projectRepository.fetchProjectsAll();
+			res.render("projects.hbs", { projects: projects });
 		}
 	}
 
