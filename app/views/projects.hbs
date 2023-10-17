@@ -1,7 +1,14 @@
 <h2>Проекты</h2>
 
-<ul>
-    {{#each projects}}
-        <li>{{this.name}}</li>
-    {{/each}}
-</ul>
+<table style="width:100%">
+	{{#each projects}}
+		<tr>
+	    	<td><a class="project-link" href="#">{{this.name}}</a></td>
+    		<td><span class="project-base-url">{{this.baseUrl}}</span></td>
+    		<td><a class="edit-project" href="#">Изменить</a></td>
+    		<td><a class="delete-project" href="#">Удалить</a></td>
+	    </tr>
+	{{/each}}
+</table>
+
+<a class="add-project" href="#">Добавить</a>
