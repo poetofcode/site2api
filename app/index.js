@@ -14,9 +14,6 @@ class Application {
 
 	constructor() {
 		this.context = this;
-		this.projectMiddleware = new apiMiddleware.ProjectMiddleware();
-		this.snippetMiddleware = new apiMiddleware.SnippetMiddleware();
-		this.endpointMiddleware = new apiMiddleware.EndpointMiddleware();
 	}
 
 	async start(config) {
@@ -43,17 +40,10 @@ class Application {
 		hbs.registerPartials(`${viewsPath}/partials`);
 	    app.use(utils.logger());
 		app.use(express.json());
-		app.use('/site/*', parser(this.getDb()));
-		apiRouter.get('/projects', this.projectMiddleware.fetchProjects);
-		apiRouter.post('/projects', this.projectMiddleware.createProject);
-		apiRouter.get('/snippets', this.snippetMiddleware.fetchSnippets);
-		apiRouter.post('/snippets', this.snippetMiddleware.createSnippet);
-		apiRouter.patch('/snippets/:id', this.snippetMiddleware.updateSnippet);
-		apiRouter.get('/projects/:projectId/endpoints', this.endpointMiddleware.fetchEndpoints);
-		apiRouter.post('/projects/:projectId/endpoints', this.endpointMiddleware.createEndpoint);
-		apiRouter.patch('/projects/:projectId/endpoints/:id', this.endpointMiddleware.updateEndpoint);
-		app.use('/api/v1', apiRouter);
 
+		app.use('/site/*', parser(this.getDb()));
+		apiMiddleware.initRoutes(apiRouter, this.context);
+		app.use('/api/v1', apiRouter);
 		consoleMiddleware.initRoutes(consoleRouter, this.context);
 		app.use('/console', consoleRouter);
 	}
