@@ -1,6 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
-const repository = require('./repository')
+const apiMiddleware = require('./api')
 const { utils } = require('./utils');
 const consoleMiddleware = require('./console');
 const parser = require('./parser').parser;
@@ -13,9 +13,9 @@ const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
 class Application {
 
 	constructor() {
-		this.projectRepository = new repository.ProjectRepository();
-		this.snippetRepository = new repository.SnippetRepository();
-		this.endpointRepository = new repository.EndpointRepository();
+		this.projectMiddleware = new apiMiddleware.ProjectMiddleware();
+		this.snippetMiddleware = new apiMiddleware.SnippetMiddleware();
+		this.endpointMiddleware = new apiMiddleware.EndpointMiddleware();
 	}
 
 	async start(config) {
@@ -43,14 +43,14 @@ class Application {
 	    app.use(utils.logger());
 		app.use(express.json());
 		app.use('/site/*', parser(this.getDb()));
-		apiRouter.get('/projects', this.projectRepository.fetchProjects);
-		apiRouter.post('/projects', this.projectRepository.createProject);
-		apiRouter.get('/snippets', this.snippetRepository.fetchSnippets);
-		apiRouter.post('/snippets', this.snippetRepository.createSnippet);
-		apiRouter.patch('/snippets/:id', this.snippetRepository.updateSnippet);
-		apiRouter.get('/projects/:projectId/endpoints', this.endpointRepository.fetchEndpoints);
-		apiRouter.post('/projects/:projectId/endpoints', this.endpointRepository.createEndpoint);
-		apiRouter.patch('/projects/:projectId/endpoints/:id', this.endpointRepository.updateEndpoint);
+		apiRouter.get('/projects', this.projectMiddleware.fetchProjects);
+		apiRouter.post('/projects', this.projectMiddleware.createProject);
+		apiRouter.get('/snippets', this.snippetMiddleware.fetchSnippets);
+		apiRouter.post('/snippets', this.snippetMiddleware.createSnippet);
+		apiRouter.patch('/snippets/:id', this.snippetMiddleware.updateSnippet);
+		apiRouter.get('/projects/:projectId/endpoints', this.endpointMiddleware.fetchEndpoints);
+		apiRouter.post('/projects/:projectId/endpoints', this.endpointMiddleware.createEndpoint);
+		apiRouter.patch('/projects/:projectId/endpoints/:id', this.endpointMiddleware.updateEndpoint);
 		app.use('/api/v1', apiRouter);
 
 		consoleMiddleware.initRoutes(consoleRouter, this.getDb());
