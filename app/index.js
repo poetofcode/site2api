@@ -13,6 +13,7 @@ const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
 class Application {
 
 	constructor() {
+		this.context = this;
 		this.projectMiddleware = new apiMiddleware.ProjectMiddleware();
 		this.snippetMiddleware = new apiMiddleware.SnippetMiddleware();
 		this.endpointMiddleware = new apiMiddleware.EndpointMiddleware();
@@ -53,7 +54,7 @@ class Application {
 		apiRouter.patch('/projects/:projectId/endpoints/:id', this.endpointMiddleware.updateEndpoint);
 		app.use('/api/v1', apiRouter);
 
-		consoleMiddleware.initRoutes(consoleRouter, this.getDb());
+		consoleMiddleware.initRoutes(consoleRouter, this.context);
 		app.use('/console', consoleRouter);
 	}
 
