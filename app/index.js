@@ -3,9 +3,10 @@ const { MongoClient } = require('mongodb');
 const repository = require('./repository')
 const { utils } = require('./utils');
 const parser = require('./parser').parser;
+const expressHbs = require("express-handlebars");
+const hbs = require("hbs");
 
 const app = express();
-const apiRouter = express.Router();
 const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
 
 class Application {
@@ -25,6 +26,19 @@ class Application {
 	}
 
 	initAPI() {
+		const apiRouter = express.Router();
+		const consoleRouter = express.Router();
+		const viewsPath = `${__dirname}/views`;
+		app.set("views", viewsPath);
+		app.engine("hbs", expressHbs.engine(
+		    {
+		        layoutsDir: `${viewsPath}/layouts`, 
+		        defaultLayout: "layout",
+		        extname: "hbs"
+		    }
+		))
+		app.set("view engine", "hbs");
+		hbs.registerPartials(`${viewsPath}/partials`);
 	    app.use(utils.logger());
 		app.use(express.json());
 		app.use('/site/*', parser(this.getDb()));
@@ -37,6 +51,14 @@ class Application {
 		apiRouter.post('/projects/:projectId/endpoints', this.endpointRepository.createEndpoint);
 		apiRouter.patch('/projects/:projectId/endpoints/:id', this.endpointRepository.updateEndpoint);
 		app.use('/api/v1', apiRouter);
+
+		consoleRouter.get("/", function(_, response){
+		    response.render("projects.hbs");
+		});
+		consoleRouter.get("/endpoints", function(_, response){
+		    response.render("endpoints.hbs");
+		});
+		app.use('/console', consoleRouter);
 	}	
 
 	getDb() {
