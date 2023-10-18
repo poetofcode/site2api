@@ -5,9 +5,13 @@ class ProjectMiddleware {
 	}
 
 	list() {
-		return async(req, res) => {
-			const projects = (await this.context.apiGet('/projects')).data;
-			res.render("projects.hbs", { projects: projects });
+		return async(req, res, next) => {
+			try {
+				const projects = (await this.context.apiGet('/projects')).data.result;
+				res.render("projects.hbs", { projects: projects });
+			} catch(err) {
+				next(err);
+			}
 		}
 	}
 

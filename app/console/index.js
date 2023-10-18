@@ -7,6 +7,15 @@ function initRoutes(router, context) {
 	
 	router.get('/', projectMiddleware.list());
 	router.get('/endpoints', endpointMiddleware.list());
+
+	router.use((err, req, res, next) => {
+	  if (res.headersSent) {
+    	return next(err)
+      }
+	  console.error(err.stack);
+	  res.render('error', { error: err });
+	});
+
 }
 
 exports.initRoutes = initRoutes;

@@ -18,6 +18,9 @@ function initRoutes(router, context) {
 	router.patch('/projects/:projectId/endpoints/:id', endpointMiddleware.updateEndpoint);
 	
 	router.use((err, req, res, next) => {
+	  if (res.headersSent) {
+    	return next(err)
+      }
 	  console.log(err);
 	  res.status(err.status || 500).send(utils.wrapError(err));
 	});
