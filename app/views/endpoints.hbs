@@ -1,25 +1,25 @@
 <div class="wrapper">
 	<h2>{{project.name}} : эндпоинты ({{endpoints.length}})</h2>
 	<ul>
-		<li>ID проекта: <span class="bold">{{project._id}}</span></li>
-		<li>Base URL: <span class="bold">{{project.baseUrl}}</span></li>
+		<li><span class="italic">ID проекта:</span> <span class="">{{project._id}}</span></li>
+		<li><span class="italic">Base URL:</span> <span class="">{{project.baseUrl}}</span></li>
 	</ul>
 </div>
 
 {{#each endpoints}}
 	<div class="wrapper">
-		<h3>{{this._id}}</h3>
 		<table style="width: 100%">
 		    <colgroup>
+		       <col span="1" style="width: 20%;">
 		       <col span="1" style="width: 10%;">
 		       <col span="1" style="width: 70%;">
-		       <col span="1" style="width: 15%;">
 		    </colgroup>
 		    
 		    <tbody>
 		        <tr>
+		        	<td><span class="mono">{{this._id}}</span></td>
 					<td><span class="mono" style="text-transform: uppercase;">{{this.method}}</span></td>
-		    		<td><span class="mono">{{this.url}}</span></td>
+		    		<td><span class="mono bold">{{this.url}}</span></td>
 		        </tr>
 		    </tbody>
 		</table>

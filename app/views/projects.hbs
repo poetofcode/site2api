@@ -3,9 +3,9 @@
 	<table style="width:100%">
 		{{#each projects}}
 			<tr>
-				<td><span class="bold">{{this._id}}</span></td>
+				<td><span class="">{{this._id}}</span></td>
 		    	<td><a class="project-link" href="/console/projects/{{this._id}}">{{this.name}}</a></td>
-	    		<td><span class="project-endpoint">эндпоинтов {{this.endpoints.length}}</span></td>
+	    		<td><span class="project-endpoint italic">эндпоинтов</span> <span class="bold">{{this.endpoints.length}}</span></td>
 	    		<td><span class="project-base-url">{{this.baseUrl}}</span></td>
 		    </tr>
 		{{/each}}
