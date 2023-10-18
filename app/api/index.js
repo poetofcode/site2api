@@ -9,6 +9,7 @@ function initRoutes(router, context) {
 	const endpointMiddleware = new EndpointMiddleware(context);
 	
 	router.get('/projects', projectMiddleware.fetchProjects());
+	router.get('/projects/:id', projectMiddleware.fetchProjectById());
 	router.post('/projects', projectMiddleware.createProject);
 	router.get('/snippets', snippetMiddleware.fetchSnippets);
 	router.post('/snippets', snippetMiddleware.createSnippet);

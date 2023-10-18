@@ -47,6 +47,23 @@ class ProjectMiddleware {
 		    }  
 		}
 	}
+
+	fetchProjectById() {
+		return async(req, res, next) => {
+		    try {
+		        const project = await this.projectRepository.fetchProjectById(req.params.id);
+		        if (!project) {
+		        	const err = new Error('Not found');
+		        	err.status = 400;
+		        	return next(err)
+		        }
+		        res.send(utils.wrapResult(project));
+		    }
+		    catch(err) {
+		    	next(err);
+		    }  
+		}
+	}
 }
 
 exports.ProjectMiddleware = ProjectMiddleware 

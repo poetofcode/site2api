@@ -1,3 +1,5 @@
+const ObjectId = require("mongodb").ObjectId;
+
 class ProjectRepository {
 
 	constructor(context) {
@@ -18,6 +20,19 @@ class ProjectRepository {
 		return await Promise.all(projectsFull);
 	}
 
+	async fetchProjectById(projectId) {
+	    const endpointCollection = this.db.collection("endpoints");
+		const projectCollection = this.db.collection('projects');
+		const project = await projectCollection.findOne({ _id : new ObjectId(projectId)});
+
+		if (project) {
+			const endpointsByItem = await endpointCollection.find({ projectId: project._id }).toArray();
+			project.endpoints = endpointsByItem;
+			return project;
+		}
+
+		return null;
+	}
 }
 
 exports.ProjectRepository = ProjectRepository 
