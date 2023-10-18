@@ -1,5 +1,5 @@
 <div class="wrapper">
-	<h2>Эндпоинты</h2>
+	<h2>Эндпоинты ({{endpoints.length}})</h2>
 </div>
 
 {{#each endpoints}}
@@ -19,5 +19,18 @@
 		        </tr>
 		    </tbody>
 		</table>
+
+		<br />
+
+		<details>
+			<summary>Сниппетов {{this.snippets.length}}</summary>
+			{{#each this.snippets}}
+				<div class="snippet">
+					<h3>{{this._id}}</h3>
+					<p class="italic">{{this.name}}</p>
+					<pre>{{this.code}}</pre>
+				</div>
+			{{/each}}
+		</details>
 	</div>
 {{/each}}

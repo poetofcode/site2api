@@ -8,6 +8,10 @@
 	font-size: 16px;
 }
 
+.italic {
+	font-style: italic;
+}
+
 html, body {
 	background: #4587A7;
 }
@@ -38,4 +42,10 @@ tr:nth-child(odd) {background: #FFF}
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+}
+
+pre {
+	color: #AAA;
+	background-color: #131313; 
+	padding: 10px 20px;
 }
