@@ -1,5 +1,9 @@
 <div class="wrapper">
-	<h2>Эндпоинты ({{endpoints.length}})</h2>
+	<h2>{{project.name}} : эндпоинты ({{endpoints.length}})</h2>
+	<ul>
+		<li>ID проекта: <span class="bold">{{project._id}}</span></li>
+		<li>Base URL: <span class="bold">{{project.baseUrl}}</span></li>
+	</ul>
 </div>
 
 {{#each endpoints}}
