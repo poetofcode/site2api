@@ -1,4 +1,11 @@
+const repository = require('../repository');
+
 class ProjectMiddleware {
+
+	constructor(context) {
+		this.context = context;
+		this.projectRepository = new repository.ProjectRepository(context);
+	}
 
 	async createProject(req, res) {
 		if(!req.body) {
@@ -28,16 +35,17 @@ class ProjectMiddleware {
 	    }      
 	}
 
-	async fetchProjects(req, res) {
-	    const collection = req.app.locals.db.collection("projects");
-	    try{
-	        const projects = await collection.find({}).toArray();
-	        res.send(projects);
-	    }
-	    catch(err){
-	        console.log(err);
-	        res.sendStatus(500);
-	    }  
+	fetchProjects() {
+		return async(req, res) => {
+		    try{
+		        const projects = await this.projectRepository.fetchProjectsAll();
+		        res.send(projects);
+		    }
+		    catch(err){
+		        console.log(err);
+		        res.sendStatus(500);
+		    }  
+		}
 	}
 }
 

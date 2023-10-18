@@ -2,6 +2,10 @@ const ObjectId = require("mongodb").ObjectId;
 
 class SnippetMiddleware {
 
+	constructor(context) {
+		this.context = context;
+	}
+
 	async createSnippet(req, res) {
 		if(!req.body) {
 			return res.sendStatus(400);

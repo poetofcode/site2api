@@ -7,7 +7,6 @@ class ProjectRepository {
 	async fetchProjectsAll() {
 	    const endpointCollection = this.db.collection("endpoints");
 		const projectCollection = this.db.collection('projects');
-
 		const projects = await projectCollection.find({}).toArray();
 
 		const projectsFull = projects.map(async (item) => {

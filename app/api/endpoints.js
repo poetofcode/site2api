@@ -2,6 +2,10 @@ const ObjectId = require("mongodb").ObjectId;
 
 class EndpointMiddleware {
 
+	constructor(context) {
+		this.context = context;
+	}
+
 	async fetchEndpoints(req, res) {
 		res.send({});
 	}

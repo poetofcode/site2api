@@ -3,11 +3,11 @@ const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
 const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
 
 function initRoutes(router, context) {
-	const projectMiddleware = new ProjectMiddleware();
-	const snippetMiddleware = new SnippetMiddleware();
-	const endpointMiddleware = new EndpointMiddleware();
+	const projectMiddleware = new ProjectMiddleware(context);
+	const snippetMiddleware = new SnippetMiddleware(context);
+	const endpointMiddleware = new EndpointMiddleware(context);
 	
-	router.get('/projects', projectMiddleware.fetchProjects);
+	router.get('/projects', projectMiddleware.fetchProjects());
 	router.post('/projects', projectMiddleware.createProject);
 	router.get('/snippets', snippetMiddleware.fetchSnippets);
 	router.post('/snippets', snippetMiddleware.createSnippet);
