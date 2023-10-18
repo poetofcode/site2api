@@ -1,3 +1,23 @@
-<h2>Эндпоинты</h2>
+<div class="wrapper">
+	<h2>Эндпоинты</h2>
+</div>
 
-Эндпоинтов - {{this.endpoints.length}}
+{{#each endpoints}}
+	<div class="wrapper">
+		<h3>{{this.name}}</h3>
+		<table style="width: 100%">
+		    <colgroup>
+		       <col span="1" style="width: 10%;">
+		       <col span="1" style="width: 70%;">
+		       <col span="1" style="width: 15%;">
+		    </colgroup>
+		    
+		    <tbody>
+		        <tr>
+					<td><span class="mono" style="text-transform: uppercase;">{{this.method}}</span></td>
+		    		<td><span class="mono">{{this.url}}</span></td>
+		        </tr>
+		    </tbody>
+		</table>
+	</div>
+{{/each}}

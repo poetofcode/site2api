@@ -1,11 +1,12 @@
-<h2>Проекты</h2>
-
-<table style="width:100%">
-	{{#each projects}}
-		<tr>
-	    	<td><a class="project-link" href="/console/projects/{{this._id}}">{{this.name}}</a></td>
-    		<td><span class="project-endpoint">эндпоинтов {{this.endpoints.length}}</span></td>
-    		<td><span class="project-base-url">{{this.baseUrl}}</span></td>
-	    </tr>
-	{{/each}}
-</table>
+<div class="wrapper">
+	<h2>Проекты</h2>
+	<table style="width:100%">
+		{{#each projects}}
+			<tr>
+		    	<td><a class="project-link" href="/console/projects/{{this._id}}">{{this.name}}</a></td>
+	    		<td><span class="project-endpoint">эндпоинтов {{this.endpoints.length}}</span></td>
+	    		<td><span class="project-base-url">{{this.baseUrl}}</span></td>
+		    </tr>
+		{{/each}}
+	</table>
+</div>

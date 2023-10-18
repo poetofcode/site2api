@@ -21,8 +21,8 @@ class Application {
 		this.config = config;
         await mongoClient.connect();
         app.locals.db = mongoClient.db(this.config.db.name);
-        this.initAPI();
         this.initHelpers();
+        this.initAPI();
         return app.listen(this.config.port);
 	}
 
