@@ -49,7 +49,7 @@ class Application {
 		app.use('/api/v1', apiRouter);
 		consoleMiddleware.initRoutes(consoleRouter, this.context);
 		app.use('/console', consoleRouter);
-		app.use('/console', express.static(`${__dirname}/public`));
+		app.use(express.static(`${__dirname}/public`));
 	}
 
 	initHelpers() {
