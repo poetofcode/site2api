@@ -6,7 +6,7 @@ function initRoutes(router, context) {
 	const endpointMiddleware = new EndpointMiddleware(context);
 	
 	router.get('/', projectMiddleware.list());
-	router.get('/endpoints', endpointMiddleware.list());
+	router.get('/projects/:projectId', endpointMiddleware.list());
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {
