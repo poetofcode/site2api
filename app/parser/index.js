@@ -55,15 +55,15 @@ function registerRoute(method, path, endpoint) {
     });
 }
 
-function parser(db) {
+function parser(context) {
 	return async(req, res, next) => {
 		const reqPath = req.originalUrl;
 		if (!reqPath.startsWith('/site')) {
 			return next();
 		}
-		const endpointRepository = new repository.EndpointRepository();
+		const endpointRepository = new repository.EndpointRepository(context);
 		try {
-			const endpoints = await endpointRepository.fetchEndpointsAll(db);
+			const endpoints = await endpointRepository.fetchEndpointsAll();
 			routes = [];
 			endpoints.forEach((item) => {
 				const itemPath = `/site/${item.project.baseUrl}/${item.url}`;

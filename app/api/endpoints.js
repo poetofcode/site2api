@@ -1,13 +1,25 @@
 const ObjectId = require("mongodb").ObjectId;
+const repository = require('../repository');
+const { utils } = require('../utils');
 
 class EndpointMiddleware {
 
 	constructor(context) {
 		this.context = context;
+		this.endpointRepository = new repository.EndpointRepository(context);
 	}
 
-	async fetchEndpoints(req, res) {
-		res.send({});
+	fetchEndpoints() {
+		return async(req, res, next) => {
+		    try {
+		    	const projectId = req.params.projectId;
+		        const endpoints = await this.endpointRepository.fetchEndpointsByProjectId(projectId);
+		        res.send(utils.wrapResult(endpoints));
+		    }
+		    catch(err) {
+		    	next(err);
+		    }  
+		}
 	}
 
 	async createEndpoint(req, res) {

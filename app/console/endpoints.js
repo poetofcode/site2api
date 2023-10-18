@@ -1,7 +1,7 @@
 class EndpointMiddleware {
 
 	constructor(context) {
-		this.db = context.getDb();
+		this.context = context;
 	}
 
 	list() {

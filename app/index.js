@@ -44,7 +44,7 @@ class Application {
 	    app.use(utils.logger());
 		app.use(express.json());
 
-		app.use('/site/*', parser(this.getDb()));
+		app.use('/site/*', parser(this.context));
 		apiMiddleware.initRoutes(apiRouter, this.context);
 		app.use('/api/v1', apiRouter);
 		consoleMiddleware.initRoutes(consoleRouter, this.context);

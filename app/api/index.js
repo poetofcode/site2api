@@ -13,7 +13,7 @@ function initRoutes(router, context) {
 	router.get('/snippets', snippetMiddleware.fetchSnippets);
 	router.post('/snippets', snippetMiddleware.createSnippet);
 	router.patch('/snippets/:id', snippetMiddleware.updateSnippet);
-	router.get('/projects/:projectId/endpoints', endpointMiddleware.fetchEndpoints);
+	router.get('/projects/:projectId/endpoints', endpointMiddleware.fetchEndpoints());
 	router.post('/projects/:projectId/endpoints', endpointMiddleware.createEndpoint);
 	router.patch('/projects/:projectId/endpoints/:id', endpointMiddleware.updateEndpoint);
 	
