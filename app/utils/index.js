@@ -29,6 +29,21 @@ function logger() {
     })
 }
 
+function wrapResult(data) {
+  return {
+    result: data
+  }
+}
+
+function wrapError(error) {
+  return {
+    error: error.message || "unknown",
+    code: error.code || -1,
+  }
+}
+
 exports.utils = {
-	logger: logger
+	logger: logger,
+  wrapResult: wrapResult,
+  wrapError: wrapError
 }

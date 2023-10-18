@@ -1,6 +1,7 @@
 const ProjectMiddleware = require('./projects.js').ProjectMiddleware;
 const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
 const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
+const { utils } = require('../utils');
 
 function initRoutes(router, context) {
 	const projectMiddleware = new ProjectMiddleware(context);
@@ -15,6 +16,11 @@ function initRoutes(router, context) {
 	router.get('/projects/:projectId/endpoints', endpointMiddleware.fetchEndpoints);
 	router.post('/projects/:projectId/endpoints', endpointMiddleware.createEndpoint);
 	router.patch('/projects/:projectId/endpoints/:id', endpointMiddleware.updateEndpoint);
+	
+	router.use((err, req, res, next) => {
+	  console.log(err);
+	  res.status(err.status || 500).send(utils.wrapError(err));
+	});
 }
 
 exports.initRoutes = initRoutes;

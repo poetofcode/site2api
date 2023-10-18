@@ -1,4 +1,5 @@
 const repository = require('../repository');
+const { utils } = require('../utils');
 
 class ProjectMiddleware {
 
@@ -36,14 +37,13 @@ class ProjectMiddleware {
 	}
 
 	fetchProjects() {
-		return async(req, res) => {
-		    try{
+		return async(req, res, next) => {
+		    try {
 		        const projects = await this.projectRepository.fetchProjectsAll();
-		        res.send(projects);
+		        res.send(utils.wrapResult(projects));
 		    }
-		    catch(err){
-		        console.log(err);
-		        res.sendStatus(500);
+		    catch(err) {
+		    	next(err);
 		    }  
 		}
 	}

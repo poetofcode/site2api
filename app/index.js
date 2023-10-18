@@ -30,6 +30,7 @@ class Application {
 		const apiRouter = express.Router();
 		const consoleRouter = express.Router();
 		const viewsPath = `${__dirname}/views`;
+
 		app.set("views", viewsPath);
 		app.engine("hbs", expressHbs.engine(
 		    {
