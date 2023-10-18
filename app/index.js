@@ -6,6 +6,7 @@ const consoleMiddleware = require('./console');
 const parser = require('./parser').parser;
 const expressHbs = require("express-handlebars");
 const hbs = require("hbs");
+const axios = require('axios');
 
 const app = express();
 const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
@@ -21,6 +22,7 @@ class Application {
         await mongoClient.connect();
         app.locals.db = mongoClient.db(this.config.db.name);
         this.initAPI();
+        this.initHelpers();
         return app.listen(this.config.port);
 	}
 
@@ -47,6 +49,13 @@ class Application {
 		consoleMiddleware.initRoutes(consoleRouter, this.context);
 		app.use('/console', consoleRouter);
 		app.use('/console', express.static(`${__dirname}/public`));
+	}
+
+	initHelpers() {
+		this.localUrl = `http://0.0.0.0:${this.config.port}/api/v1`;
+		this.apiGet = (url) => {
+			return axios.get(`${this.localUrl}${url}`);
+		}
 	}
 
 	getDb() {

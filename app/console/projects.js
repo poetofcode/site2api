@@ -1,16 +1,12 @@
-const repository = require('../repository');
-
 class ProjectMiddleware {
 
 	constructor(context) {
-		this.projectRepository = new repository.ProjectRepository(context);
-		console.log(repository);
-		console.log(this.projectRepository);
+		this.context = context;
 	}
 
 	list() {
 		return async(req, res) => {
-			const projects = await this.projectRepository.fetchProjectsAll();
+			const projects = (await this.context.apiGet('/projects')).data;
 			res.render("projects.hbs", { projects: projects });
 		}
 	}
