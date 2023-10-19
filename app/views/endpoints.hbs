@@ -6,32 +6,6 @@
 	</ul>
 </div>
 
-<div class="wrapper">
-	<div id="editor" style="font-family: monospace; height: 600px; width: 100%;"></div>
-
-	<script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script>
-		var editor = ace.edit("editor");
-        editor.setOptions({
-            fontSize: "12pt",
-            autoScrollEditorIntoView: true,
-            copyWithEmptySelection: true,
-            tabSize: 2,
-            useSoftTabs: true
-        });
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/javascript");
-        editor.focus();
-        
-		editor.session.setOptions({ 
-			tabSize: 8, 
-			useSoftTabs: true 
-		})
-
-        editor.setValue('const abc = "123";');    
-    </script>
-</div>
-
 {{#each endpoints}}
 	<div class="wrapper">
 		<table style="width: 100%">
@@ -52,12 +26,26 @@
 
 		<br />
 
-		<details>
+		<details open>
 			<summary>Сниппетов {{this.snippets.length}}</summary>
 			{{#each this.snippets}}
 				<div class="snippet">
-					<h4>{{this._id}}</h4>
-					<p class="italic">{{this.name}}</p>
+					<table style="width: 100%">
+					    <colgroup>
+					       <col span="1" style="width: 20%;">
+					       <col span="1" style="width: 70%;">
+					       <col span="1" style="width: 10%;">
+					    </colgroup>
+					    
+					    <tbody>
+					        <tr>
+					        	<td>{{this._id}}</td>
+								<td><span class="italic">{{this.name}}</span></td>
+					    		<td><a href="/snippets/{{this._id}}">Редактировать</a></td>
+					        </tr>
+					    </tbody>
+					</table>
+
 					<pre>{{this.code}}</pre>
 				</div>
 			{{/each}}

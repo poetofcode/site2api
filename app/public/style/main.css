@@ -58,3 +58,13 @@ pre {
 #editor * {
 	font-family: monospace;
 }
+
+.snippet > table {
+	margin-top: 20px;
+}
+.snippet > table tr, .snippet > table td {
+	background: lightgray;
+}
+.snippet pre {
+	margin-top: 0px;
+}
