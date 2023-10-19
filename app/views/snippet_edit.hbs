@@ -1,7 +1,23 @@
 <div id="code-hidden" style="display: none;">{{this.snippet.code}}</div>
 
 <div id="snippet-layout">
-    <div id="snippet-header"></div>
+    <div id="snippet-header">
+        <table style="width: 100%">
+        <colgroup>
+           <col span="1" style="width: 20%;">
+           <col span="1" style="width: 70%;">
+           <col span="1" style="width: 10%;">
+        </colgroup>
+        
+        <tbody>
+            <tr>
+                <td>{{this.snippet._id}}</td>
+                <td><span class="italic">{{this.snippet.name}}</span></td>
+                <td><a class="modern-button" href="#" style="padding: 6px 32px;">Сохранить</a></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
 	<div id="editor"></div>
 </div>
 
