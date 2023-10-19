@@ -54,3 +54,7 @@ pre {
 	background-color: #131313; 
 	padding: 10px 20px;
 }
+
+#editor * {
+	font-family: monospace;
+}

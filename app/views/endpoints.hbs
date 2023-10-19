@@ -7,10 +7,29 @@
 </div>
 
 <div class="wrapper">
-	<pre class="editor"></pre>
-	<script type="text/javascript" src="/lib/prismjs/prism.js"></script>
-	<script type="module">
-  	</script>
+	<div id="editor" style="font-family: monospace; height: 600px; width: 100%;"></div>
+
+	<script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+		var editor = ace.edit("editor");
+        editor.setOptions({
+            fontSize: "12pt",
+            autoScrollEditorIntoView: true,
+            copyWithEmptySelection: true,
+            tabSize: 2,
+            useSoftTabs: true
+        });
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+        editor.focus();
+        
+		editor.session.setOptions({ 
+			tabSize: 8, 
+			useSoftTabs: true 
+		})
+
+        editor.setValue('const abc = "123";');    
+    </script>
 </div>
 
 {{#each endpoints}}
