@@ -1,5 +1,6 @@
 <div class="wrapper">
 	<div id="editor" style="font-family: monospace; height: 600px; width: 100%;"></div>
+    <div id="code-hidden" style="display: none;">{{this.snippet.code}}</div>
 
 	<script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
@@ -8,18 +9,18 @@
             fontSize: "12pt",
             autoScrollEditorIntoView: true,
             copyWithEmptySelection: true,
-            tabSize: 2,
-            useSoftTabs: true
         });
         editor.setTheme("ace/theme/monokai");
         editor.session.setMode("ace/mode/javascript");
+        editor.getSession().setUseWorker(false);
         editor.focus();
         
 		editor.session.setOptions({ 
-			tabSize: 8, 
-			useSoftTabs: true 
+			tabSize: 4, 
+			useSoftTabs: true
 		})
 
-        editor.setValue('const abc = "123";');    
+        editor.setValue(htmlDecode(document.getElementById('code-hidden').innerHTML));
+        editor.gotoLine(0);
     </script>
 </div>

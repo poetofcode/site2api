@@ -9,10 +9,8 @@ class SnippetMiddleware {
 			try {
 				const snippetId = req.params.snippetId;
 				console.log(`snippetId: ${snippetId}`);
-				
-				// const endpoints = (await this.context.apiGet(`/projects/${projectId}/endpoints`)).data.result;
-				// const project = (await this.context.apiGet(`/projects/${projectId}`)).data.result;
-				res.render("snippet_edit.hbs", { });
+				const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
+				res.render("snippet_edit.hbs", { snippet : snippet });
 			} catch(err) {
 				next(err);
 			}
