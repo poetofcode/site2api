@@ -6,6 +6,16 @@
 	</ul>
 </div>
 
+<div class="wrapper">
+	<pre class="editor" class="language-javascript"></pre>
+	<script type="text/javascript" src="/lib/prismjs/prism.js"></script>
+	<script type="module">
+		import { CodeJar } from '/lib/codejar/codejar.js';
+	  	let jar = CodeJar(document.querySelector('.editor'), Prism.highlightElement, {tab: '\t'});
+	  	jar.updateCode('let foo = bar;');
+	</script>
+</div>
+
 {{#each endpoints}}
 	<div class="wrapper">
 		<table style="width: 100%">
@@ -19,7 +29,7 @@
 		        <tr>
 		        	<td><span class="mono">{{this._id}}</span></td>
 					<td><span class="mono" style="text-transform: uppercase;">{{this.method}}</span></td>
-		    		<td><span class="mono bold">{{this.url}}</span></td>
+		    		<td><span class="mono">/site/{{this.project.baseUrl}}</span><span class="mono bold">/{{this.url}}</span></td>
 		        </tr>
 		    </tbody>
 		</table>
