@@ -55,6 +55,24 @@ pre {
 	padding: 10px 20px;
 }
 
+#snippet-header {
+	background-color: #CCC;
+	position: fixed;
+	width: 960px;
+	top: 0;
+	left: 50%;
+	margin-left: -480px;
+	height: 80px;
+}
+
+#editor {
+	position: fixed;
+	top: 80px;
+	bottom: 0;
+	width: 960px;
+	left: 50%;
+	margin-left: -480px;
+}
 #editor * {
 	font-family: monospace;
 }

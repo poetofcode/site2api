@@ -1,26 +1,28 @@
-<div class="wrapper">
-	<div id="editor" style="font-family: monospace; height: 600px; width: 100%;"></div>
-    <div id="code-hidden" style="display: none;">{{this.snippet.code}}</div>
+<div id="code-hidden" style="display: none;">{{this.snippet.code}}</div>
 
-	<script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-    <script>
-		var editor = ace.edit("editor");
-        editor.setOptions({
-            fontSize: "12pt",
-            autoScrollEditorIntoView: true,
-            copyWithEmptySelection: true,
-        });
-        editor.setTheme("ace/theme/monokai");
-        editor.session.setMode("ace/mode/javascript");
-        editor.getSession().setUseWorker(false);
-        editor.focus();
-        
-		editor.session.setOptions({ 
-			tabSize: 4, 
-			useSoftTabs: true
-		})
-
-        editor.setValue(htmlDecode(document.getElementById('code-hidden').innerHTML));
-        editor.gotoLine(0);
-    </script>
+<div id="snippet-layout">
+    <div id="snippet-header"></div>
+	<div id="editor"></div>
 </div>
+
+<script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setOptions({
+        fontSize: "12pt",
+        autoScrollEditorIntoView: true,
+        copyWithEmptySelection: true,
+    });
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/javascript");
+    editor.getSession().setUseWorker(false);
+    editor.focus();
+    
+    editor.session.setOptions({ 
+        tabSize: 4, 
+        useSoftTabs: true
+    })
+
+    editor.setValue(htmlDecode(document.getElementById('code-hidden').innerHTML));
+    editor.gotoLine(0);
+</script>
