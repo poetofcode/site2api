@@ -12,6 +12,7 @@ function initRoutes(router, context) {
 	router.get('/projects/:id', projectMiddleware.fetchProjectById());
 	router.post('/projects', projectMiddleware.createProject);
 	router.get('/snippets', snippetMiddleware.fetchSnippets);
+	router.get('/snippets/:id', snippetMiddleware.fetchSnippetById());
 	router.post('/snippets', snippetMiddleware.createSnippet);
 	router.patch('/snippets/:id', snippetMiddleware.updateSnippet);
 	router.get('/projects/:projectId/endpoints', endpointMiddleware.fetchEndpoints());

@@ -1,9 +1,12 @@
 const ObjectId = require("mongodb").ObjectId;
+const repository = require('../repository');
+const { utils } = require('../utils');
 
 class SnippetMiddleware {
 
 	constructor(context) {
 		this.context = context;
+		this.snippetRepository = new repository.SnippetRepository(this.context);
 	}
 
 	async createSnippet(req, res) {
@@ -44,6 +47,23 @@ class SnippetMiddleware {
 
 	async fetchSnippets(req, res) {
 		res.send({});
+	}
+
+	fetchSnippetById() {
+		return async(req, res, next) => {
+		    try {
+		        const snippet = await this.snippetRepository.fetchSnippetById(req.params.id);
+		        if (!snippet) {
+		        	const err = new Error('Not found');
+		        	err.status = 400;
+		        	return next(err)
+		        }
+		        res.send(utils.wrapResult(snippet));
+		    }
+		    catch(err) {
+		    	next(err);
+		    }  
+		}
 	}
 
 	async updateSnippet(req, res) {
