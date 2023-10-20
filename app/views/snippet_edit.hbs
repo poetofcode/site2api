@@ -67,6 +67,14 @@
             });
     }
 
+    editor.commands.addCommand({
+        name: 'save',
+        bindKey: {win: "Ctrl-S", "mac": "Cmd-S"},
+        exec: function (editor) {
+            submitChanges();
+        }
+    });
+
     $('#save').click((e) => {
         // console.log('click');
         submitChanges();
