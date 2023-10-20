@@ -56,13 +56,20 @@
                 response
                     .json()
                     .then(data => {
+                        if (data.result) {
+                            showToast(data.result, false);
+                        } else {
+                            showToast(data.error, true);
+                        }
                         console.log(JSON.stringify(data));
                     })
                     .catch(err => {
+                        showToast(err.message, true);
                         console.log(err);
                     });
             })
             .catch(err => {
+                showToast(err.message, true);
                 console.log(err);
             });
     }
