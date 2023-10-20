@@ -66,47 +66,49 @@ class SnippetMiddleware {
 		}
 	}
 
-	async updateSnippet(req, res) {
-		if(!req.body) {
-			return res.sendStatus(400);
-		}
-	    const collection = req.app.locals.db.collection("snippets");
-		const name = req.body.name;
-		const endpointId = req.body.endpointId;
-		const projectId = req.body.projectId;
-		const code = req.body.code;
-		const id = req.params.id;
+	updateSnippet() {
+		return async(req, res, next) => {
+			if(!req.body) {
+				return next(utils.buildError(400, 'Body is empty'));
+			}
+		    const collection = req.app.locals.db.collection("snippets");
+			const name = req.body.name;
+			const endpointId = req.body.endpointId;
+			const projectId = req.body.projectId;
+			const code = req.body.code;
+			const id = req.params.id;
 
-		const snippet = {};
-		if (name && name != 'undefined') {
-			snippet.name = name;
-		}
-		if (endpointId && endpointId != 'undefined') {
-			snippet.endpointId = endpointId;
-		}
-		if (projectId && projectId != 'undefined') {
-			snippet.projectId = projectId;
-		}
-		if (code && code != 'undefined') {
-			snippet.code = code;
-		}
+			const snippet = {};
+			if (name && name != 'undefined') {
+				snippet.name = name;
+			}
+			if (endpointId && endpointId != 'undefined') {
+				snippet.endpointId = endpointId;
+			}
+			if (projectId && projectId != 'undefined') {
+				snippet.projectId = projectId;
+			}
+			if (code && code != 'undefined') {
+				snippet.code = code;
+			}
 
-		if (snippet == {}) {
-			return res.status(400).send("No found fields for update");
-		}
+			if (snippet == {}) {
+				return next(utils.buildError(400, 'No found fields for update'));
+			}
 
-	    try{
-			const result = await collection.findOneAndUpdate(
-				{ _id : new ObjectId(id) }, 
-				{ $set: snippet }, 
-				{ returnDocument: "after" }
-			);
-	        res.send(result.value);
-	    } 
-	    catch(err){
-	    	console.log(err);
-	        res.status(500).send(err);
-	    }      
+		    try{
+				const result = await collection.findOneAndUpdate(
+					{ _id : new ObjectId(id) }, 
+					{ $set: snippet }, 
+					{ returnDocument: "after" }
+				);
+		        res.send(utils.wrapResult('ok'));
+		    } 
+		    catch(err){
+		    	console.log(err);
+		        next(err);
+		    }      
+		}
 	}
 
 }

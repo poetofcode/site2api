@@ -42,6 +42,15 @@ function wrapError(error) {
   }
 }
 
+function buildError(status, description, code) {
+  const err = new Error(description);
+  if (code) {
+    err.code = code;
+  }
+  err.status = status;
+  return err;
+}
+
 exports.utils = {
 	logger: logger,
   wrapResult: wrapResult,
