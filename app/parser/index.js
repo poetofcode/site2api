@@ -1,6 +1,7 @@
 const repository = require('../repository')
 const axios = require('axios');
 const cheerio = require("cheerio");
+const iconv = require('iconv-lite');
 
 const codeLayout = `(function() {
 	{{snippet}}
