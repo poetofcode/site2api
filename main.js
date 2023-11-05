@@ -9,6 +9,7 @@ const config = {
 
 (async () => {
 	try {
+		console.log("[UPDATE] Before start");
 		await app.start(config);
 	    console.log("Сервер ожидает подключения...");
 	} catch(err) {

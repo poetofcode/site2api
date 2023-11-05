@@ -9,7 +9,7 @@ const hbs = require("hbs");
 const axios = require('axios');
 
 const app = express();
-const mongoClient = new MongoClient("mongodb://127.0.0.1:27017/");
+const mongoClient = new MongoClient("mongodb://mongo_db:27017/");
 
 class Application {
 
