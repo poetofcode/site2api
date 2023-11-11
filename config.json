@@ -1,0 +1,16 @@
+{
+  "dev": {
+    "port": 3000,
+    "db": {
+      "url": "mongodb://127.0.0.1:27017/",
+      "name": "site2api"
+    }
+  },
+  "prod": {
+    "port": 3000,
+    "db": {
+      "url": "mongodb://mongo_db:27017/",
+      "name": "site2api"
+    }
+  }
+}

@@ -9,7 +9,6 @@ const hbs = require("hbs");
 const axios = require('axios');
 
 const app = express();
-const mongoClient = new MongoClient("mongodb://mongo_db:27017/");
 
 class Application {
 
@@ -19,6 +18,7 @@ class Application {
 
 	async start(config) {
 		this.config = config;
+		const mongoClient = new MongoClient(this.config.db.url);
         await mongoClient.connect();
         app.locals.db = mongoClient.db(this.config.db.name);
         this.initHelpers();
