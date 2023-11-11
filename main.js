@@ -9,9 +9,9 @@ const config = {
 
 (async () => {
 	try {
-		console.log("[UPDATE] Before start");
+		console.log("Starting...");
 		await app.start(config);
-	    console.log("Сервер ожидает подключения...");
+	    console.log(`Server running: http://127.0.0.1:${config.post}/console`);
 	} catch(err) {
 	    return console.log(err);
 	} 
