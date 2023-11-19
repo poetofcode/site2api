@@ -4,4 +4,5 @@ COPY package*.json .
 RUN npm install
 COPY . .
 ENV SITE2API_ENV=prod
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
+CMD ["npm", "dev"]
