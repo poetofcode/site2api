@@ -29,8 +29,5 @@
     "mongodb": "^6.1.0",
     "prismjs": "^1.29.0",
     "winston": "^3.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.6"
   }
 }
