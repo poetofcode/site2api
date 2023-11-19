@@ -7,6 +7,8 @@ services:
     restart: always
     volumes:
       - mongo_db:/data/db
+    logging:
+      driver: none
 
 
   api:
