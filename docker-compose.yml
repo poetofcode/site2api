@@ -14,7 +14,7 @@ services:
     ports:
       - 80:3000
     volumes:
-      - .:/home/poet/docker-pr/site2api
+      - ./app:/home/poet/docker-pr/site2api/app
     environment:
       PORT: 3000
       MONGODB_URI: mongodb://mongo_db:27017
