@@ -10,6 +10,8 @@ function initRoutes(router, context) {
 	router.get('/', projectMiddleware.list());
 	router.get('/projects/:projectId', endpointMiddleware.list());
 	router.get('/snippets/:snippetId', snippetMiddleware.details());
+	router.get('/edit', editGet());
+	router.post('/edit', editPost());
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {
@@ -19,6 +21,26 @@ function initRoutes(router, context) {
 	  res.render('error', { error: err });
 	});
 
+}
+
+function editGet() {
+	return async(req, res, next) => {
+		try {
+			const snippetId = req.params.snippetId;
+			console.log(`snippetId: ${snippetId}`);
+			const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
+			res.render("snippet_edit.hbs", { snippet : snippet });
+		} catch(err) {
+			next(err);
+		}
+	}
+}
+
+function editPost() {
+	return async(req, res, next) => {
+		// TODO 
+		next(err);
+	}
 }
 
 exports.initRoutes = initRoutes;
