@@ -26,10 +26,13 @@ function initRoutes(router, context) {
 function editGet() {
 	return async(req, res, next) => {
 		try {
-			const snippetId = req.params.snippetId;
-			console.log(`snippetId: ${snippetId}`);
-			const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
-			res.render("snippet_edit.hbs", { snippet : snippet });
+			// const snippetId = req.params.snippetId;
+			// console.log(`snippetId: ${snippetId}`);
+			// const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
+			res.render("entity_edit.hbs", { 
+				title: "Новый проект",
+				entity : { code: "// TODO" }
+			});
 		} catch(err) {
 			next(err);
 		}
