@@ -1,6 +1,7 @@
 const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
 const ProjectMiddleware = require('./projects.js').ProjectMiddleware;
 const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
+const createEntityProvider = require('./provider').createEntityProvider;
 
 function initRoutes(router, context) {
 	const projectMiddleware = new ProjectMiddleware(context);
@@ -29,9 +30,17 @@ function editGet() {
 			// const snippetId = req.params.snippetId;
 			// console.log(`snippetId: ${snippetId}`);
 			// const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
+
+			const entityType = "project-type";	// TODO брать из query-параметров
+			const entityProvider = createEntityProvider(this.context, entityType);
+
+			const body = await entityProvider.provideCreateEntityBody();
+
+			console.log(`Body: ${body}`);
+
 			res.render("entity_edit.hbs", { 
-				title: "Новый проект",
-				entity : { code: "// TODO" }
+				title: body.title,
+				entity : { code: body.code }
 			});
 		} catch(err) {
 			next(err);
