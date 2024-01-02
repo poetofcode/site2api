@@ -2,6 +2,11 @@ class ProjectEntityProvider {
 
     constructor(context) {
         this.context = context;
+
+        this.code = {
+           name: "NewProject",
+           baseUrl: "misc.com" 
+        }
     }
 
 
@@ -9,7 +14,7 @@ class ProjectEntityProvider {
 
         return {
             title: "Новый проект",
-            code: "{ 'sample' : 'Sample Project Body' }"
+            code: this.code
         };
     }
 
@@ -19,6 +24,8 @@ class ProjectEntityProvider {
     }
 
     async prepareEntityBodyAndSave(entityBody) {
+
+
 
         return {};
     }

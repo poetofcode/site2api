@@ -40,7 +40,9 @@ function editGet() {
 
 			res.render("entity_edit.hbs", { 
 				title: body.title,
-				entity : { code: body.code }
+				entity : { 
+					code: JSON.stringify(body.code, null, 4) 
+				}
 			});
 		} catch(err) {
 			next(err);
