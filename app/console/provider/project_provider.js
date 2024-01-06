@@ -24,10 +24,8 @@ class ProjectEntityProvider {
     }
 
     async prepareEntityBodyAndSave(entityBody) {
-
-
-
-        return {};
+        const fullRes = await this.context.apiPost(`/projects/`, entityBody);
+        return fullRes.data.result;
     }
 
 }

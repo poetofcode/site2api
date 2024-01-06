@@ -8,11 +8,17 @@ function initRoutes(router, context) {
 	const endpointMiddleware = new EndpointMiddleware(context);
 	const snippetMiddleware = new SnippetMiddleware(context);
 
+	// Коммент по устройству админки:
+	// 	методы на просмотр сущностей (проектов, эндпоинтов) сделаны в виде просто обычных HTML-форм,
+	//	а вот редактирование сделал с помощью редактора кода. Поэтому их не нужно искать в ./projects.js, ./endpoints.js и т.д.
+	//  Они идут чуть ниже по коду... 
 	router.get('/', projectMiddleware.list());
 	router.get('/projects/:projectId', endpointMiddleware.list());
 	router.get('/snippets/:snippetId', snippetMiddleware.details());
-	router.get('/edit', editGet());
-	router.post('/edit', editPost());
+	
+	// ...вот методы на редактирование сущностей
+	router.get('/edit', editGet(context));
+	router.patch('/edit', editPatch(context));
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {
@@ -24,7 +30,7 @@ function initRoutes(router, context) {
 
 }
 
-function editGet() {
+function editGet(context) {
 	return async(req, res, next) => {
 		try {
 			// const snippetId = req.params.snippetId;
@@ -32,7 +38,7 @@ function editGet() {
 			// const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
 
 			const entityType = "project-type";	// TODO брать из query-параметров
-			const entityProvider = createEntityProvider(this.context, entityType);
+			const entityProvider = createEntityProvider(context, entityType);
 
 			const body = await entityProvider.provideCreateEntityBody();
 
@@ -50,10 +56,29 @@ function editGet() {
 	}
 }
 
-function editPost() {
+function editPatch(context) {
 	return async(req, res, next) => {
-		// TODO 
-		next(err);
+		try {
+            const entityType = "project-type";  // TODO брать из query-параметров
+            const entityProvider = createEntityProvider(context, entityType);
+            const entityBody = req.body.code;
+            const result = await entityProvider.prepareEntityBodyAndSave(entityBody);
+
+            console.log("RES:");
+            console.log(result);
+
+            return res.status(200).send(result);
+
+			// throw new Exception("to-do: implement!")
+			// const err = new Error('Not found hgjhgjh');
+   //      	err.status = 400;
+   //      	return res.status(400).send({
+   //      		error: "Description"
+   //      	})
+
+		} catch (err) {
+			next(err);
+		}
 	}
 }
 

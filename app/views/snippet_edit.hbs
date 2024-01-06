@@ -56,7 +56,7 @@
                 response
                     .json()
                     .then(data => {
-                        if (data.result) {
+                        if ('result' in data) {
                             showToast(data.result, false);
                         } else {
                             showToast(data.error, true);
@@ -83,7 +83,6 @@
     });
 
     $('#save').click((e) => {
-        // console.log('click');
         submitChanges();
         e.preventDefault();
     })

@@ -8,32 +8,34 @@ class ProjectMiddleware {
 		this.projectRepository = new repository.ProjectRepository(context);
 	}
 
-	async createProject(req, res) {
-		if(!req.body) {
-			return res.sendStatus(400);
-		}
-	    const collection = req.app.locals.db.collection("projects");
-		const name = req.body.name;
-		const baseUrl = req.body.baseUrl;
-		if (!name || name == 'undefined') {
-			return res.sendStatus(400);
-		}
-		if (!baseUrl || baseUrl == 'undefined') {
-			return res.sendStatus(400);
-		}
-		const project = { 
-			name: name,
-			baseUrl: baseUrl
-		}
+	createProject() {
+		return async(req, res, next) => {
+			if(!req.body) {
+				return next(utils.buildError(400, 'Body is empty'))
+			}
+		    const collection = req.app.locals.db.collection("projects");
+			const name = req.body.name;
+			const baseUrl = req.body.baseUrl;
+			if (!name || name == 'undefined') {
+				return next(utils.buildError(400, '"name" is empty'))
+			}
+			if (!baseUrl || baseUrl == 'undefined') {
+				return next(utils.buildError(400, '"baseUrl" is empty'))
+			}
+			const project = { 
+				name: name,
+				baseUrl: baseUrl
+			}
 
-	    try{
-	        const projects = await collection.insertOne(project);
-	        res.send(project);
-	    }
-	    catch(err){
-	        console.log(err);
-	        res.sendStatus(500);
-	    }      
+		    try{
+		        const projects = await collection.insertOne(project);
+		        res.send(utils.wrapResult({ result: project }));
+		    }
+		    catch(err){
+		        console.log(err);
+		        next(err);
+		    }      
+		}
 	}
 
 	fetchProjects() {
