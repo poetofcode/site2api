@@ -2,7 +2,7 @@ class ProjectEntityProvider {
 
     constructor(context) {
         this.context = context;
-        
+
         this.code = {
            name: "NewProject",
            baseUrl: "misc.com" 
@@ -18,9 +18,14 @@ class ProjectEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
-        console.log(`provideEditEntityBody: ${entityId}`);
-
-        return "TO-DO: get project edit body";
+        const found = (await this.context.apiGet(`/projects/${entityId}`)).data.result;
+        return {
+            title: "Ред. проект",
+            code: {
+                name: found.name,
+                baseUrl: found.baseUrl
+            }
+        };
     }
 
     async prepareEntityBodyAndSave(entityBody, action) {
