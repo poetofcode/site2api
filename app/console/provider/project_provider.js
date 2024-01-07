@@ -2,7 +2,7 @@ class ProjectEntityProvider {
 
     constructor(context) {
         this.context = context;
-
+        
         this.code = {
            name: "NewProject",
            baseUrl: "misc.com" 
@@ -11,7 +11,6 @@ class ProjectEntityProvider {
 
 
     async provideCreateEntityBody() {
-
         return {
             title: "Новый проект",
             code: this.code
@@ -19,6 +18,7 @@ class ProjectEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
+        console.log(`provideEditEntityBody: ${entityId}`);
 
         return "TO-DO: get project edit body";
     }

@@ -35,8 +35,8 @@ function editGet(context) {
 		try {
 			const entityType = "project-type";	// TODO брать из query-параметров
 			const entityProvider = createEntityProvider(context, entityType);
-
-			const body = await entityProvider.provideCreateEntityBody();
+			const entityId = req.query.id;
+			const body = entityId ? (await entityProvider.provideEditEntityBody(entityId)) : (await entityProvider.provideCreateEntityBody());
 
 			res.render("entity_edit.hbs", { 
 				title: body.title,

@@ -5,7 +5,7 @@
 			<tr id="{{this._id}}">
 				<td><span class="">{{this._id}}</span></td>
 		    	<td><a class="project-link" href="/console/projects/{{this._id}}">{{this.name}}</a></td>
-	    		<td><a class="edit-project" href="#">ред</a></td>
+	    		<td><a class="edit-project" href="/console/edit?entity=project&action=edit&id={{this._id}}">ред</a></td>
 	    		<td><span class="project-endpoint italic">эндпоинтов</span> <span class="bold">{{this.endpoints.length}}</span></td>
 	    		<td><span class="project-base-url">{{this.baseUrl}}</span></td>
 	    		<td><a class="remove-project" href="#">x</a></td>
@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
 	function deleteProject(id) {
-		console.log(`Deleting project ${id}...`)
+		// console.log(`Deleting project ${id}...`)
 
         fetch(`/api/v1/projects/${id}`, {
             method: 'DELETE',
