@@ -18,7 +18,7 @@ function initRoutes(router, context) {
 	
 	// ...вот методы на редактирование сущностей
 	router.get('/edit', editGet(context));
-	router.patch('/edit', editPatch(context));
+	router.post('/edit', editPost(context));
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {
@@ -50,7 +50,7 @@ function editGet(context) {
 	}
 }
 
-function editPatch(context) {
+function editPost(context) {
 	return async(req, res, next) => {
 		try {
             const entityType = "project-type";  // TODO брать из query-параметров

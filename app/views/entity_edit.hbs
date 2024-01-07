@@ -46,7 +46,7 @@
         const newCode = editor.getValue();
         // TODO возможно будем брать урлу из текущей строки браузера:
         fetch("/console/edit/", {
-            method: 'PATCH',
+            method: 'POST',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
