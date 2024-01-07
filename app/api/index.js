@@ -11,14 +11,17 @@ function initRoutes(router, context) {
 	router.get('/projects', projectMiddleware.fetchProjects());
 	router.get('/projects/:id', projectMiddleware.fetchProjectById());
 	router.post('/projects', projectMiddleware.createProject());
+	router.delete('/projects/:id', projectMiddleware.deleteProjectById());
+
 	router.get('/snippets', snippetMiddleware.fetchSnippets);
 	router.get('/snippets/:id', snippetMiddleware.fetchSnippetById());
 	router.post('/snippets', snippetMiddleware.createSnippet);
 	router.patch('/snippets/:id', snippetMiddleware.updateSnippet());
+
 	router.get('/projects/:projectId/endpoints', endpointMiddleware.fetchEndpoints());
 	router.post('/projects/:projectId/endpoints', endpointMiddleware.createEndpoint);
 	router.patch('/projects/:projectId/endpoints/:id', endpointMiddleware.updateEndpoint);
-	
+
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {
     	return next(err)

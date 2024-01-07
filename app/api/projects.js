@@ -66,6 +66,19 @@ class ProjectMiddleware {
 		    }  
 		}
 	}
+
+	deleteProjectById() {
+		return async(req, res, next) => {
+			try {
+		        await this.projectRepository.deleteProjectById(req.params.id);
+		        res.send(utils.wrapResult('ok'));
+		    }
+		    catch(err) {
+		    	next(err);
+		    }  
+		}
+	}
+	
 }
 
 exports.ProjectMiddleware = ProjectMiddleware 

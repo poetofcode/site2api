@@ -19,6 +19,36 @@
 <script type="text/javascript">
 	function deleteProject(id) {
 		console.log(`Deleting project ${id}...`)
+
+        fetch(`/api/v1/projects/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            response
+                .json()
+                .then(data => {
+                    if (data.result) {
+                        window.location.reload();
+                        return;
+                    }
+                    if (!data.result) {
+                        showToast(data.error, true);
+                    }
+                    console.log(JSON.stringify(data));
+                })
+                .catch(err => {
+                    showToast(err.message, true);
+                    console.log(err);
+                });
+        })
+        .catch(err => {
+            showToast(err.message, true);
+            console.log(err);
+        });
 	}
 
 	$('.remove-project').click(function(e) {
