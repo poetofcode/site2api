@@ -28,7 +28,7 @@ class ProjectEntityProvider {
         };
     }
 
-    async prepareEntityBodyAndSave(entityBody, action) {
+    async prepareEntityBodyAndSave(entityBody, action, entityId) {
         const fullRes = await this.context.apiPost(`/projects/`, entityBody);
         const response = fullRes.data.result;
         response.redirect = `/console/projects/${response.result._id}`;
