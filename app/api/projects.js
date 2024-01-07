@@ -1,3 +1,4 @@
+const ObjectId = require("mongodb").ObjectId;
 const repository = require('../repository');
 const { utils } = require('../utils');
 
@@ -37,6 +38,43 @@ class ProjectMiddleware {
 		    }      
 		}
 	}
+
+
+	updateProject() {
+		return async(req, res, next) => {
+			if(!req.body) {
+				return next(utils.buildError(400, 'Body is empty'))
+			}
+		    const collection = req.app.locals.db.collection("projects");
+			const name = req.body.name;
+			const baseUrl = req.body.baseUrl;
+			const id = req.params.id;
+			if (!name || name == 'undefined') {
+				return next(utils.buildError(400, '"name" is empty'))
+			}
+			if (!baseUrl || baseUrl == 'undefined') {
+				return next(utils.buildError(400, '"baseUrl" is empty'))
+			}
+			const project = { 
+				name: name,
+				baseUrl: baseUrl
+			}
+
+		    try{
+				const result = await collection.findOneAndUpdate(
+					{ _id : new ObjectId(id) }, 
+					{ $set: project }, 
+					{ returnDocument: "after" }
+				);
+		        res.send(utils.wrapResult({ result: result }));
+		    }
+		    catch(err){
+		        console.log(err);
+		        next(err);
+		    }      
+		}
+	}
+
 
 	fetchProjects() {
 		return async(req, res, next) => {
@@ -78,7 +116,7 @@ class ProjectMiddleware {
 		    }  
 		}
 	}
-	
+
 }
 
 exports.ProjectMiddleware = ProjectMiddleware 

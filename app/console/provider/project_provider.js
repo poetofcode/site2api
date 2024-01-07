@@ -29,10 +29,23 @@ class ProjectEntityProvider {
     }
 
     async prepareEntityBodyAndSave(entityBody, action, entityId) {
-        const fullRes = await this.context.apiPost(`/projects/`, entityBody);
-        const response = fullRes.data.result;
-        response.redirect = `/console/projects/${response.result._id}`;
-        return response;
+        let fullRes;
+        let response;
+        switch(action) {
+          case 'add':
+            fullRes = await this.context.apiPost(`/projects/`, entityBody);
+            response = fullRes.data.result;
+            response.redirect = `/console/projects/${response.result._id}`;
+            return response;
+
+          case 'edit':
+            fullRes = await this.context.apiPatch(`/projects/${entityId}`, entityBody);
+            response = fullRes.data.result;
+            response.redirect = `/console/projects/${entityId}`;
+            return response;
+        }
+
+        throw new Error(`Not found '${action}' action`)
     }
 
 }
