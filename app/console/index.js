@@ -33,16 +33,10 @@ function initRoutes(router, context) {
 function editGet(context) {
 	return async(req, res, next) => {
 		try {
-			// const snippetId = req.params.snippetId;
-			// console.log(`snippetId: ${snippetId}`);
-			// const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
-
 			const entityType = "project-type";	// TODO брать из query-параметров
 			const entityProvider = createEntityProvider(context, entityType);
 
 			const body = await entityProvider.provideCreateEntityBody();
-
-			console.log(`Body: ${body}`);
 
 			res.render("entity_edit.hbs", { 
 				title: body.title,
@@ -64,20 +58,10 @@ function editPatch(context) {
             const entityBody = req.body.code;
             const result = await entityProvider.prepareEntityBodyAndSave(entityBody);
 
-            console.log("RES:");
-            console.log(result);
-
             return res.status(200).send(result);
-
-			// throw new Exception("to-do: implement!")
-			// const err = new Error('Not found hgjhgjh');
-   //      	err.status = 400;
-   //      	return res.status(400).send({
-   //      		error: "Description"
-   //      	})
-
 		} catch (err) {
-			next(err);
+			console.log(err);
+			res.status(err.response.status).send(err.response.data)
 		}
 	}
 }
