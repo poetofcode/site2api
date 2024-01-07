@@ -56,7 +56,7 @@ function editPost(context) {
             const entityType = "project-type";  // TODO брать из query-параметров
             const entityProvider = createEntityProvider(context, entityType);
             const entityBody = req.body.code;
-            const result = await entityProvider.prepareEntityBodyAndSave(entityBody);
+            const result = await entityProvider.prepareEntityBodyAndSave(entityBody, req.query.action);
 
             return res.status(200).send(result);
 		} catch (err) {

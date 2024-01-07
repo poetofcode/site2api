@@ -42,10 +42,13 @@
     editor.setValue(htmlDecode(document.getElementById('code-hidden').innerHTML));
     editor.gotoLine(0);
 
+    var currentUrl = window.location.href.substring(window.location.origin.length);
+    console.log(currentUrl);
+
     function submitChanges() {
         const newCode = editor.getValue();
         // TODO возможно будем брать урлу из текущей строки браузера:
-        fetch("/console/edit/", {
+        fetch(currentUrl, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
