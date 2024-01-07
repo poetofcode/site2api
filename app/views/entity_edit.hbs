@@ -57,6 +57,10 @@
                 response
                     .json()
                     .then(data => {
+                        if (data.result && data.redirect) {
+                            window.location.replace(data.redirect);
+                            return;
+                        }
                         if (data.result) {
                             showToast(data.result, false);
                         } else {
