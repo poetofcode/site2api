@@ -10,7 +10,7 @@ function initRoutes(router, context) {
 	
 	router.get('/projects', projectMiddleware.fetchProjects());
 	router.get('/projects/:id', projectMiddleware.fetchProjectById());
-	router.post('/projects', projectMiddleware.createProject);
+	router.post('/projects', projectMiddleware.createProject());
 	router.get('/snippets', snippetMiddleware.fetchSnippets);
 	router.get('/snippets/:id', snippetMiddleware.fetchSnippetById());
 	router.post('/snippets', snippetMiddleware.createSnippet);
