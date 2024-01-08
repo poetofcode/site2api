@@ -28,7 +28,9 @@ class ProjectEntityProvider {
         };
     }
 
-    async prepareEntityBodyAndSave(entityBody, action, entityId) {
+    async prepareEntityBodyAndSave(entityBody, query) {
+        const action = query.action;
+        const entityId = query.id;
         let fullRes;
         let response;
         switch(action) {

@@ -33,7 +33,7 @@ function initRoutes(router, context) {
 function editGet(context) {
 	return async(req, res, next) => {
 		try {
-			const entityType = "project-type";	// TODO брать из query-параметров
+			const entityType = req.query.entity;
 			const entityProvider = createEntityProvider(context, entityType);
 			const entityId = req.query.id;
 			const body = entityId ? (await entityProvider.provideEditEntityBody(entityId)) : (await entityProvider.provideCreateEntityBody());
@@ -53,12 +53,10 @@ function editGet(context) {
 function editPost(context) {
 	return async(req, res, next) => {
 		try {
-            const entityType = "project-type";  // TODO брать из query-параметров
+            const entityType = req.query.entity;
             const entityProvider = createEntityProvider(context, entityType);
             const entityBody = req.body.code;
-            const entityId = req.query.id;
-            const action = req.query.action;
-            const result = await entityProvider.prepareEntityBodyAndSave(entityBody, action, entityId);
+            const result = await entityProvider.prepareEntityBodyAndSave(entityBody, req.query);
 
             return res.status(200).send(result);
 		} catch (err) {
