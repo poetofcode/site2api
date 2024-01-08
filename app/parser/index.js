@@ -66,7 +66,7 @@ function parser(context) {
 		try {
 			const endpoints = await endpointRepository.fetchEndpointsAll();
 			routes = [];
-			endpoints.forEach((item) => {
+			endpoints.filter((item) => item.project).forEach((item) => {
 				const itemPath = `/site/${item.project.baseUrl}/${item.url}`;
 				const method = item.method.toUpperCase();
 				registerRoute(method, itemPath, item);
