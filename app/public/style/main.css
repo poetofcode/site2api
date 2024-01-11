@@ -30,7 +30,7 @@ html, body {
 
 .sidenav {
   width: 130px;
-  position: absolute;
+  position: fixed;
   z-index: 1;
   top: 50px;
   left: -650px;
