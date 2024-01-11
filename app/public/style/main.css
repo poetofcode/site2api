@@ -35,7 +35,7 @@ html, body {
   top: 50px;
   left: -650px;
   margin: 0 50%;
-  background: #eee;
+  /* background: #eee; */
   overflow-x: hidden;
   padding: 8px 0;
 }
@@ -44,7 +44,8 @@ html, body {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
   font-size: 25px;
-  color: #2196F3;
+  /* color: #2196F3; */
+  color: white;
   display: block;
 }
 
