@@ -29,11 +29,11 @@ html, body {
 }
 
 .sidenav {
-  width: 130px;
+  width: 200px;
   position: fixed;
   z-index: 1;
   top: 50px;
-  left: -650px;
+  left: -710px;
   margin: 0 50%;
   /* background: #eee; */
   overflow-x: hidden;
@@ -47,6 +47,7 @@ html, body {
   /* color: #2196F3; */
   color: white;
   display: block;
+  text-align: right;
 }
 
 .sidenav a:hover {
