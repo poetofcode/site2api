@@ -30,7 +30,7 @@
 		<br />
 
 		<details>
-			<summary>Сниппетов {{this.snippets.length}}</summary>
+			<summary>Сниппетов {{this.snippets.length}}{{#each this.snippets}}&nbsp;<a href="/console/snippets/{{this._id}}">{{this._id}}</a>{{/each}}</summary>
 			{{#each this.snippets}}
 				<div class="snippet">
 					<table style="width: 100%">
