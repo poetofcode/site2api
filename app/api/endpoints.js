@@ -101,6 +101,18 @@ class EndpointMiddleware {
 	    }     		
 	}
 
+	deleteEndpoint() {
+		return async(req, res, next) => {
+			try {
+		        await this.endpointRepository.deleteEndpoint(req.params.id);
+		        res.send(utils.wrapResult('ok'));
+		    }
+		    catch(err) {
+		    	next(err);
+		    }  
+		}
+	}
+
 	async updateEndpoint(req, res) {
 		res.send({});
 	}
