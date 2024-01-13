@@ -45,14 +45,8 @@ class EndpointEntityProvider {
           case 'add':
             let snippetRes = await this.context.apiPost(`/snippets`, this.snippet);
             const snippetId = snippetRes.data._id;
-            console.log(snippetId);
-
-            console.log(entityBody);
-
         
-            const entityJson = JSON.parse(entityBody);
-            console.log(entityJson);
-            
+            const entityJson = JSON.parse(entityBody);           
             const snippets = entityJson.snippets;
             snippets.push(snippetId);
 
@@ -64,14 +58,15 @@ class EndpointEntityProvider {
             fullRes = await this.context.apiPost(`/projects/${projectId}/endpoints`, endpoint);
             response = fullRes.data.result;
 
-            response.redirect = `/console/projects/${projectId}#${response._id}`;
+            response.redirect = `/console/projects/${projectId}`;
             return response;
 
-          // case 'edit':
-          //   fullRes = await this.context.apiPatch(`/projects/${entityId}`, entityBody);
-          //   response = fullRes.data.result;
-          //   response.redirect = `/console/projects/${entityId}`;
-          //   return response;
+          case 'edit':
+            fullRes = await this.context.apiPatch(`/projects/${projectId}/endpoints/${entityId}`, entityBody);
+            response = fullRes.data.result;
+
+            response.redirect = `/console/projects/${projectId}`;
+            return response;
         }
 
         throw new Error(`Not found '${action}' action`)
