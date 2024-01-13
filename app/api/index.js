@@ -21,7 +21,7 @@ function initRoutes(router, context) {
 
 	router.get('/projects/:projectId/endpoints', endpointMiddleware.fetchEndpoints());
 	router.post('/projects/:projectId/endpoints', endpointMiddleware.createEndpoint());
-	router.patch('/projects/:projectId/endpoints/:id', endpointMiddleware.updateEndpoint);
+	router.patch('/projects/:projectId/endpoints/:id', endpointMiddleware.updateEndpoint());
 	router.delete('/endpoints/:id', endpointMiddleware.deleteEndpoint())
 
 	router.use((err, req, res, next) => {
