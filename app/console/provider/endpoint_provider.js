@@ -24,14 +24,15 @@ class EndpointEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
-        // const found = (await this.context.apiGet(`/projects/${entityId}`)).data.result;
-        // return {
-        //     title: "Ред. проект",
-        //     code: {
-        //         name: found.name,
-        //         baseUrl: found.baseUrl
-        //     }
-        // };
+        const found = (await this.context.apiGet(`/endpoints/${entityId}`)).data.result;
+        return {
+            title: "Ред. эндпоинт",
+            code: {
+                url: found.url,
+                snippets: found.snippets,
+                method: found.method
+            }
+        }
     }
 
     async prepareEntityBodyAndSave(entityBody, query) {

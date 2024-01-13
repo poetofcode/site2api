@@ -44,6 +44,14 @@ class EndpointRepository {
 		return await Promise.all(endpointsFull);
 	}
 
+	async fetchEndpointById(endpointId) {
+		const db = this.context.getDb();
+	    const collection = db.collection("endpoints");
+
+	    const endpoint = await collection.findOne({ _id : new ObjectId(endpointId)});
+	    return endpoint;
+	}
+
 	async deleteEndpoint(id) {
 		// TODO возможно нужно удалять в будущем связанные сниппеты
 		const db = this.context.getDb();

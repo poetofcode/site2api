@@ -198,6 +198,23 @@ class EndpointMiddleware {
 		}
 	}
 
+	fetchEndpointById() {
+		return async(req, res, next) => {
+			try {
+		        const endpoint = await this.endpointRepository.fetchEndpointById(req.params.id);
+		        if (!endpoint) {
+		        	const err = new Error('Not found');
+		        	err.status = 400;
+		        	return next(err)
+		        }
+		        res.send(utils.wrapResult(endpoint));
+		    }
+		    catch(err) {
+		    	next(err);
+		    }  
+		}
+	}
+
 	log(arr, title) {
 		console.log(`================ ${title}:`);
 		console.log(arr);
