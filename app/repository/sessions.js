@@ -8,28 +8,20 @@ class SessionRepository {
         this.sessionCollection = this.db.collection('sessions');
     }
 
-    async createSession(userName) {
+    async createSession(userName, clientIP) {
         const newSession = {
             token: crypto.randomUUID(),
             createdAt: new Date(),
             user: userName,
+            ip: clientIP
         }
         const sessions = await this.sessionCollection.insertOne(newSession);
         return newSession;
     }
 
     async fetchSessionsAll() {
-        // const endpointCollection = this.db.collection("endpoints");
-        // const projectCollection = this.db.collection('projects');
-        // const projects = await projectCollection.find({}).toArray();
-
-        // const projectsFull = projects.map(async (item) => {
-        //     const endpointsByItem = await endpointCollection.find({ projectId: item._id }).toArray();
-        //     item.endpoints = endpointsByItem;
-        //     return item;
-        // });
-
-        // return await Promise.all(projectsFull);
+        const sessions = await this.sessionCollection.find({}).toArray();
+        return sessions;
     }
 
     async fetchSessionById(projectId) {

@@ -32,7 +32,8 @@ class SessionMiddleware {
             }
 
             try {
-                const session = await this.sessionRepository.createSession(userName);
+                const clientIP = parseIp(req);
+                const session = await this.sessionRepository.createSession(userName, clientIP);
                 res.send(utils.wrapResult(session));
             }
             catch(err) {
@@ -43,13 +44,13 @@ class SessionMiddleware {
 
     fetchSessions() {
         return async(req, res, next) => {
-            // try {
-            //     const projects = await this.projectRepository.fetchProjectsAll();
-            //     res.send(utils.wrapResult(projects));
-            // }
-            // catch(err) {
-            //     next(err);
-            // }  
+            try {
+                const sessions = await this.sessionRepository.fetchSessionsAll();
+                res.send(utils.wrapResult(sessions));
+            }
+            catch(err) {
+                next(err);
+            }  
         }
     }
 
@@ -83,5 +84,9 @@ class SessionMiddleware {
     }
 
 }
+
+const parseIp = (req) =>
+    req.headers['x-forwarded-for']?.split(',').shift()
+    || req.socket?.remoteAddress
 
 exports.SessionMiddleware = SessionMiddleware;
