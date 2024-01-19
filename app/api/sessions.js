@@ -11,31 +11,33 @@ class SessionMiddleware {
 
     createSession() {
         return async(req, res, next) => {
-            // if(!req.body) {
-            //     return next(utils.buildError(400, 'Body is empty'))
-            // }
-            // const collection = req.app.locals.db.collection("projects");
-            // const name = req.body.name;
-            // const baseUrl = req.body.baseUrl;
-            // if (!name || name == 'undefined') {
-            //     return next(utils.buildError(400, '"name" is empty'))
-            // }
-            // if (!baseUrl || baseUrl == 'undefined') {
-            //     return next(utils.buildError(400, '"baseUrl" is empty'))
-            // }
-            // const project = { 
-            //     name: name,
-            //     baseUrl: baseUrl
-            // }
+            const refName = "admin";
+            const refPassword = "qwerty123";
 
-            // try{
-            //     const projects = await collection.insertOne(project);
-            //     res.send(utils.wrapResult({ result: project }));
-            // }
-            // catch(err){
-            //     console.log(err);
-            //     next(err);
-            // }      
+            if(!req.body) {
+                return next(utils.buildError(400, 'Body is empty'))
+            }
+            const userName = req.body.name;
+            const password = req.body.password;
+
+            if (!userName || userName == 'undefined') {
+                return next(utils.buildError(400, '"name" is empty'))
+            }
+            if (!password || password == 'undefined') {
+                return next(utils.buildError(400, '"password" is empty'))
+            }
+
+            if (userName !== refName || password !== refPassword) {
+                return next(utils.buildError(400, 'Invalid login or password'));
+            }
+
+            try {
+                const session = await this.sessionRepository.createSession(userName);
+                res.send(utils.wrapResult(session));
+            }
+            catch(err) {
+                next(err);
+            }              
         }
     }
 
