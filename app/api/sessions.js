@@ -53,7 +53,7 @@ class SessionMiddleware {
 
     fetchSessionById() {
         return async(req, res, next) => {
-            try {
+            // try {
             //     const project = await this.projectRepository.fetchProjectById(req.params.id);
             //     if (!project) {
             //         const err = new Error('Not found');
