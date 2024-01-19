@@ -33,6 +33,14 @@ class ProjectRepository {
 
 		return null;
 	}
+
+	async deleteProjectById(projectId) {
+		// TODO возможно нужно удалять в будущем связанные эндпойнты
+		const projectCollection = this.db.collection('projects');
+		const result = await projectCollection.deleteOne({ _id : new ObjectId(projectId)});
+		return result;
+	}
+
 }
 
 exports.ProjectRepository = ProjectRepository 

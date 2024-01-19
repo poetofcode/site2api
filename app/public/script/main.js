@@ -18,7 +18,7 @@ function codeEscape(buffer) {
 
 function showToast(msg, isError) {
 	Toastify({
-	  text: msg,
+	  text: !isError ? 'Ok' : msg,
 	  duration: 3000,
 	  // destination: "https://github.com/apvarun/toastify-js",
 	  newWindow: true,

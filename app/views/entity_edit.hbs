@@ -1,4 +1,4 @@
-<div id="code-hidden" style="display: none;">{{this.snippet.code}}</div>
+<div id="code-hidden" style="display: none;">{{this.entity.code}}</div>
 
 <div id="snippet-layout">
     <div id="snippet-header">
@@ -11,14 +11,14 @@
         
         <tbody>
             <tr>
-                <td>{{this.snippet._id}}</td>
-                <td><span class="italic">{{this.snippet.name}}</span></td>
+                <td>{{this.title}}</td>
+                <td><span class="italic">// TODO</span></td>
                 <td><a id="save" class="modern-button" href="#" style="padding: 6px 32px;">Сохранить</a></td>
             </tr>
         </tbody>
     </table>
     </div>
-	<div id="editor"></div>
+    <div id="editor"></div>
 </div>
 
 <script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -30,7 +30,7 @@
         copyWithEmptySelection: true,
     });
     editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/javascript");
+    editor.session.setMode("ace/mode/json");
     editor.getSession().setUseWorker(false);
     editor.focus();
     
@@ -42,10 +42,14 @@
     editor.setValue(htmlDecode(document.getElementById('code-hidden').innerHTML));
     editor.gotoLine(0);
 
+    var currentUrl = window.location.href.substring(window.location.origin.length);
+    console.log(currentUrl);
+
     function submitChanges() {
         const newCode = editor.getValue();
-        fetch("/api/v1/snippets/{{this.snippet._id}}", {
-            method: 'PATCH',
+        // TODO возможно будем брать урлу из текущей строки браузера:
+        fetch(currentUrl, {
+            method: 'POST',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
@@ -56,7 +60,11 @@
                 response
                     .json()
                     .then(data => {
-                        if ('result' in data) {
+                        if (data.result && data.redirect) {
+                            window.location.replace(data.redirect);
+                            return;
+                        }
+                        if (data.result) {
                             showToast(data.result, false);
                         } else {
                             showToast(data.error, true);

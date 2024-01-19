@@ -2,12 +2,61 @@
 	<h2>Проекты</h2>
 	<table style="width:100%">
 		{{#each projects}}
-			<tr>
+			<tr id="{{this._id}}">
 				<td><span class="">{{this._id}}</span></td>
 		    	<td><a class="project-link" href="/console/projects/{{this._id}}">{{this.name}}</a></td>
+	    		<td><a class="edit-project" href="/console/edit?entity=project&action=edit&id={{this._id}}">ред</a></td>
 	    		<td><span class="project-endpoint italic">эндпоинтов</span> <span class="bold">{{this.endpoints.length}}</span></td>
 	    		<td><span class="project-base-url">{{this.baseUrl}}</span></td>
+	    		<td><a class="remove-project" href="#">x</a></td>
 		    </tr>
 		{{/each}}
 	</table>
+
+	<a class="add-project modern-button" href="/console/edit?entity=project&action=add">Добавить проект</a>
 </div>
+
+<script type="text/javascript">
+	function deleteProject(id) {
+		// console.log(`Deleting project ${id}...`)
+
+        fetch(`/api/v1/projects/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            response
+                .json()
+                .then(data => {
+                    if (data.result) {
+                        window.location.reload();
+                        return;
+                    }
+                    if (!data.result) {
+                        showToast(data.error, true);
+                    }
+                    console.log(JSON.stringify(data));
+                })
+                .catch(err => {
+                    showToast(err.message, true);
+                    console.log(err);
+                });
+        })
+        .catch(err => {
+            showToast(err.message, true);
+            console.log(err);
+        });
+	}
+
+	$('.remove-project').click(function(e) {
+        e.preventDefault();
+        var id = $(this).closest('tr').attr('id');
+
+        if (confirm(`Уверены, что хотите удалить проект? (${id})`)) {
+		  deleteProject(id);
+		} 
+    });
+</script>

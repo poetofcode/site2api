@@ -57,6 +57,38 @@ class Application {
 		this.apiGet = (url) => {
 			return axios.get(`${this.localUrl}${url}`);
 		}
+
+		this.apiPost = (url, data) => {
+			const result = axios({
+	          method: 'post',
+	          url: `${this.localUrl}${url}`,
+	          // SRC: https://ru.stackoverflow.com/questions/1159061/axios-%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-post
+	          // params: {
+	          //   user_key_id: 'USER_KEY_ID',
+	          // },
+	          data: data,
+	          headers: {
+	            "Content-type": "application/json; charset=UTF-8"
+	          }
+	        });
+			return result;
+		}
+
+		this.apiPatch = (url, data) => {
+			const result = axios({
+	          method: 'patch',
+	          url: `${this.localUrl}${url}`,
+	          // SRC: https://ru.stackoverflow.com/questions/1159061/axios-%D0%9A%D0%B0%D0%BA-%D0%BE%D1%82%D0%BF%D1%80%D0%B0%D0%B2%D0%B8%D1%82%D1%8C-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D1%87%D0%B5%D1%80%D0%B5%D0%B7-post
+	          // params: {
+	          //   user_key_id: 'USER_KEY_ID',
+	          // },
+	          data: data,
+	          headers: {
+	            "Content-type": "application/json; charset=UTF-8"
+	          }
+	        });
+			return result;
+		}
 	}
 
 	getDb() {

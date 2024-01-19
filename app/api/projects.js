@@ -1,3 +1,4 @@
+const ObjectId = require("mongodb").ObjectId;
 const repository = require('../repository');
 const { utils } = require('../utils');
 
@@ -8,33 +9,72 @@ class ProjectMiddleware {
 		this.projectRepository = new repository.ProjectRepository(context);
 	}
 
-	async createProject(req, res) {
-		if(!req.body) {
-			return res.sendStatus(400);
-		}
-	    const collection = req.app.locals.db.collection("projects");
-		const name = req.body.name;
-		const baseUrl = req.body.baseUrl;
-		if (!name || name == 'undefined') {
-			return res.sendStatus(400);
-		}
-		if (!baseUrl || baseUrl == 'undefined') {
-			return res.sendStatus(400);
-		}
-		const project = { 
-			name: name,
-			baseUrl: baseUrl
-		}
+	createProject() {
+		return async(req, res, next) => {
+			if(!req.body) {
+				return next(utils.buildError(400, 'Body is empty'))
+			}
+		    const collection = req.app.locals.db.collection("projects");
+			const name = req.body.name;
+			const baseUrl = req.body.baseUrl;
+			if (!name || name == 'undefined') {
+				return next(utils.buildError(400, '"name" is empty'))
+			}
+			if (!baseUrl || baseUrl == 'undefined') {
+				return next(utils.buildError(400, '"baseUrl" is empty'))
+			}
+			const project = { 
+				name: name,
+				baseUrl: baseUrl
+			}
 
-	    try{
-	        const projects = await collection.insertOne(project);
-	        res.send(project);
-	    }
-	    catch(err){
-	        console.log(err);
-	        res.sendStatus(500);
-	    }      
+		    try{
+		        const projects = await collection.insertOne(project);
+		        res.send(utils.wrapResult({ result: project }));
+		    }
+		    catch(err){
+		        console.log(err);
+		        next(err);
+		    }      
+		}
 	}
+
+
+	updateProject() {
+		return async(req, res, next) => {
+			if(!req.body) {
+				return next(utils.buildError(400, 'Body is empty'))
+			}
+		    const collection = req.app.locals.db.collection("projects");
+			const name = req.body.name;
+			const baseUrl = req.body.baseUrl;
+			const id = req.params.id;
+			if (!name || name == 'undefined') {
+				return next(utils.buildError(400, '"name" is empty'))
+			}
+			if (!baseUrl || baseUrl == 'undefined') {
+				return next(utils.buildError(400, '"baseUrl" is empty'))
+			}
+			const project = { 
+				name: name,
+				baseUrl: baseUrl
+			}
+
+		    try{
+				const result = await collection.findOneAndUpdate(
+					{ _id : new ObjectId(id) }, 
+					{ $set: project }, 
+					{ returnDocument: "after" }
+				);
+		        res.send(utils.wrapResult({ result: result }));
+		    }
+		    catch(err){
+		        console.log(err);
+		        next(err);
+		    }      
+		}
+	}
+
 
 	fetchProjects() {
 		return async(req, res, next) => {
@@ -64,6 +104,19 @@ class ProjectMiddleware {
 		    }  
 		}
 	}
+
+	deleteProjectById() {
+		return async(req, res, next) => {
+			try {
+		        await this.projectRepository.deleteProjectById(req.params.id);
+		        res.send(utils.wrapResult('ok'));
+		    }
+		    catch(err) {
+		    	next(err);
+		    }  
+		}
+	}
+
 }
 
 exports.ProjectMiddleware = ProjectMiddleware 

@@ -4,6 +4,7 @@
 		<li><span class="italic">ID проекта:</span> <span class="">{{project._id}}</span></li>
 		<li><span class="italic">Base URL:</span> <span class="">{{project.baseUrl}}</span></li>
 	</ul>
+	<a class="add-endpoint modern-button" href="/console/edit?entity=endpoint&action=add&project={{project._id}}">Добавить эндпоинт</a>
 </div>
 
 {{#each endpoints}}
@@ -16,10 +17,12 @@
 		    </colgroup>
 		    
 		    <tbody>
-		        <tr>
+		        <tr id="{{this._id}}">
 		        	<td><span class="mono">{{this._id}}</span></td>
 					<td><span class="mono" style="text-transform: uppercase;">{{this.method}}</span></td>
-		    		<td><span class="mono">/site/{{this.project.baseUrl}}</span><span class="mono bold">/{{this.url}}</span></td>
+		    		<td><span class="mono">/site/{{this.project.baseUrl}}</span><span class="mono bold">/{{this.url}}</span> <a target=”_blank” href="/site/{{this.project.baseUrl}}/{{this.url}}">→</a></td>
+		    		<td><a class="edit-endpoint" href="/console/edit?entity=endpoint&action=edit&project={{project._id}}&id={{this._id}}">ред</a></td>
+		    		<td><a class="remove-endpoint" href="#">x</a></td>
 		        </tr>
 		    </tbody>
 		</table>
@@ -27,7 +30,7 @@
 		<br />
 
 		<details>
-			<summary>Сниппетов {{this.snippets.length}}</summary>
+			<summary>Сниппетов {{this.snippets.length}}{{#each this.snippets}}&nbsp;<a href="/console/snippets/{{this._id}}">{{this._id}}</a>{{/each}}</summary>
 			{{#each this.snippets}}
 				<div class="snippet">
 					<table style="width: 100%">
@@ -52,3 +55,46 @@
 		</details>
 	</div>
 {{/each}}
+
+<script type="text/javascript">
+	function deleteEndpoint(id) {
+        fetch(`/api/v1/endpoints/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+            response
+                .json()
+                .then(data => {
+                    if (data.result) {
+                        window.location.reload();
+                        return;
+                    }
+                    if (!data.result) {
+                        showToast(data.error, true);
+                    }
+                    console.log(JSON.stringify(data));
+                })
+                .catch(err => {
+                    showToast(err.message, true);
+                    console.log(err);
+                });
+        })
+        .catch(err => {
+            showToast(err.message, true);
+            console.log(err);
+        });
+	}
+
+	$('.remove-endpoint').click(function(e) {
+        e.preventDefault();
+        var id = $(this).closest('tr').attr('id');
+
+        if (confirm(`Уверены, что хотите удалить эндпоинт? (${id})`)) {
+		  deleteEndpoint(id);
+		} 
+    });
+</script>

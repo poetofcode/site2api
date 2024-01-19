@@ -54,5 +54,6 @@ function buildError(status, description, code) {
 exports.utils = {
 	logger: logger,
   wrapResult: wrapResult,
-  wrapError: wrapError
+  wrapError: wrapError,
+  buildError: buildError
 }
