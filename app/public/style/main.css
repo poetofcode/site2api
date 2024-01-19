@@ -91,6 +91,7 @@ pre {
 	color: #AAA;
 	background-color: #131313; 
 	padding: 10px 20px;
+    overflow-x: scroll;
 }
 
 #snippet-header {
