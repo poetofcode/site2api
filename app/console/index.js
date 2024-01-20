@@ -1,12 +1,16 @@
 const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
 const ProjectMiddleware = require('./projects.js').ProjectMiddleware;
 const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
+const AuthMiddleware = require('./auth.js').AuthMiddleware;
 const createEntityProvider = require('./provider').createEntityProvider;
 
 function initRoutes(router, context) {
 	const projectMiddleware = new ProjectMiddleware(context);
 	const endpointMiddleware = new EndpointMiddleware(context);
 	const snippetMiddleware = new SnippetMiddleware(context);
+	const authMiddleware = new AuthMiddleware(context);
+
+	router.get('/login', authMiddleware.loginPage());
 
 	// Коммент по устройству админки:
 	// 	методы на просмотр сущностей (проектов, эндпоинтов) сделаны в виде просто обычных HTML-форм,
