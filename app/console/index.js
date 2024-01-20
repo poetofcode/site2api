@@ -10,6 +10,17 @@ function initRoutes(router, context) {
 	const snippetMiddleware = new SnippetMiddleware(context);
 	const authMiddleware = new AuthMiddleware(context);
 
+	router.use(function (req, res, next) {
+	    switch (req.path) {
+	        case '/login':
+	            res.locals.isLogin = true;
+	            break;
+	        default:
+	            res.locals.isLogin = false;
+	    }
+	    next();
+	});
+
 	router.get('/login', authMiddleware.loginPage());
 
 	// Коммент по устройству админки:
