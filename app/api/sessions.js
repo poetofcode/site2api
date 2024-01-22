@@ -11,6 +11,9 @@ class SessionMiddleware {
 
     createSession() {
         return async(req, res, next) => {
+            //
+            // TODO брать эти поля из конфига (конфиг не должен попасть в GIT)
+            //
             const refName = "admin";
             const refPassword = "qwerty123";
 

@@ -7,6 +7,7 @@ const parser = require('./parser').parser;
 const expressHbs = require("express-handlebars");
 const hbs = require("hbs");
 const axios = require('axios');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -44,6 +45,7 @@ class Application {
 	    app.use(utils.logger());
 		app.use(express.json());
 		app.use(express.urlencoded());
+		app.use(cookieParser());
 
 		app.use('/site/*', parser(this.context));
 		apiMiddleware.initRoutes(apiRouter, this.context);

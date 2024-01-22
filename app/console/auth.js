@@ -1,3 +1,5 @@
+const cookieParser = require('cookie-parser');
+
 class AuthMiddleware {
 
 	constructor(context) {
@@ -17,12 +19,16 @@ class AuthMiddleware {
 	loginAction(req, res) {
 		return async(req, res, next) => {
 			try {
-				// res.render("signin.hbs");
-
-				console.log("Request body:");
-				console.log(req.body);
-
-				res.status(500).send('error');
+	            var response = await this.context.apiPost(`/sessions`, {
+	            	name: req.body.username,
+	            	password: req.body.password
+	            });
+	            const result = response.data.result;
+	            if (!result) {
+	            	return next(new Error('Error auth'));
+	            }
+				res.cookie('token', result.token);
+				res.redirect('/console');
 
 			} catch(err) {
 				next(err);
