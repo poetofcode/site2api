@@ -24,13 +24,13 @@ class AuthMiddleware {
 	            	password: req.body.password
 	            });
 	            const result = response.data.result;
-	            if (!result) {
-	            	return next(new Error('Error auth'));
-	            }
 				res.cookie('token', result.token);
 				res.redirect('/console');
 
 			} catch(err) {
+	            if (err.response.status == 400) {
+	            	return res.render("signin.hbs", { authError: true });
+	            }
 				next(err);
 			}
 		}

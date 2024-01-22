@@ -12,3 +12,9 @@
 		</div>
 	</form>
 </div>
+
+<script type="text/javascript">
+	{{#if authError}}
+		showToast('Неверные логин или пароль', true);
+	{{/if}}
+</script>
