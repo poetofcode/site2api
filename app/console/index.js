@@ -22,6 +22,7 @@ function initRoutes(router, context) {
 	});
 
 	router.get('/login', authMiddleware.loginPage());
+	router.post('/login', authMiddleware.loginAction());
 
 	// Коммент по устройству админки:
 	// 	методы на просмотр сущностей (проектов, эндпоинтов) сделаны в виде просто обычных HTML-форм,

@@ -43,6 +43,7 @@ class Application {
 		hbs.registerPartials(`${viewsPath}/partials`);
 	    app.use(utils.logger());
 		app.use(express.json());
+		app.use(express.urlencoded());
 
 		app.use('/site/*', parser(this.context));
 		apiMiddleware.initRoutes(apiRouter, this.context);

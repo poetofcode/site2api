@@ -15,7 +15,19 @@ class AuthMiddleware {
 	}
 
 	loginAction(req, res) {
-		// TODO
+		return async(req, res, next) => {
+			try {
+				// res.render("signin.hbs");
+
+				console.log("Request body:");
+				console.log(req.body);
+
+				res.status(500).send('error');
+
+			} catch(err) {
+				next(err);
+			}
+		}
 	}
 
 }
