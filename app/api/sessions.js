@@ -77,13 +77,14 @@ class SessionMiddleware {
 
     deleteSessionByToken() {
         return async(req, res, next) => {
-            // try {
-            //     await this.projectRepository.deleteProjectById(req.params.id);
-            //     res.send(utils.wrapResult('ok'));
-            // }
-            // catch(err) {
-            //     next(err);
-            // }  
+            try {
+                const token = req.params.token;
+                await this.sessionRepository.deleteSessionByToken(token);
+                res.send(utils.wrapResult('ok'));
+            }
+            catch(err) {
+                next(err);
+            }  
         }
     }
 

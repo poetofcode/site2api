@@ -29,7 +29,7 @@ class SessionRepository {
         return session;
     }
 
-    async deleteSessionToken(token) {
+    async deleteSessionByToken(token) {
         const result = await this.sessionCollection.deleteOne({ token : token });
         return result;
     }
