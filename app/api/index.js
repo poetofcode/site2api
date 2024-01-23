@@ -20,19 +20,14 @@ function initRoutes(router, context) {
 		const isSessionsPost = req.path === '/sessions' && req.method === 'POST';
 		const isSessionByTokenGet = req.path.startsWith("/sessions/") && req.path !== "/sessions/" && req.method === 'GET';
 		const isSessionByTokenDelete = req.path.startsWith("/sessions/") && req.path !== "/sessions/" && req.method === 'DELETE';
-
 		if (isSessionsPost || isSessionByTokenGet || isSessionByTokenDelete) {
-			console.log('Пропускаем');
 			return next();
 		}
 
 		if (authHeader) {
 			const token = authHeader.replace('Bearer ', '');
-			console.log('Token: ' + token);
-
             const session = await sessionRepository.fetchSessionByToken(token);
             if (session) {
-            	console.log('Сессия найдена! API');
             	return next();
             }
 		}
