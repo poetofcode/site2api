@@ -1,7 +1,8 @@
 class ProjectEntityProvider {
 
-    constructor(context) {
+    constructor(context, token) {
         this.context = context;
+        this.token = token;
 
         this.code = {
            name: "NewProject",
@@ -18,7 +19,7 @@ class ProjectEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
-        const found = (await this.context.apiGet(`/projects/${entityId}`)).data.result;
+        const found = (await this.context.apiGet(`/projects/${entityId}`, this.token)).data.result;
         return {
             title: "Ред. проект",
             code: {
@@ -35,13 +36,13 @@ class ProjectEntityProvider {
         let response;
         switch(action) {
           case 'add':
-            fullRes = await this.context.apiPost(`/projects/`, entityBody);
+            fullRes = await this.context.apiPost(`/projects/`, entityBody, this.token);
             response = fullRes.data.result;
             response.redirect = `/console/projects/${response.result._id}`;
             return response;
 
           case 'edit':
-            fullRes = await this.context.apiPatch(`/projects/${entityId}`, entityBody);
+            fullRes = await this.context.apiPatch(`/projects/${entityId}`, entityBody, this.token);
             response = fullRes.data.result;
             response.redirect = `/console/projects/${entityId}`;
             return response;

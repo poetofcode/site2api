@@ -1,7 +1,8 @@
 class EndpointEntityProvider {
 
-    constructor(context) {
+    constructor(context, token) {
         this.context = context;
+        this.token = token;
 
         this.code = {
             url: "sample",
@@ -24,7 +25,7 @@ class EndpointEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
-        const found = (await this.context.apiGet(`/endpoints/${entityId}`)).data.result;
+        const found = (await this.context.apiGet(`/endpoints/${entityId}`, this.token)).data.result;
         return {
             title: "Ред. эндпоинт",
             code: {
@@ -43,7 +44,7 @@ class EndpointEntityProvider {
         let response;
         switch(action) {
           case 'add':
-            let snippetRes = await this.context.apiPost(`/snippets`, this.snippet);
+            let snippetRes = await this.context.apiPost(`/snippets`, this.snippet, this.token);
             const snippetId = snippetRes.data._id;
         
             const entityJson = JSON.parse(entityBody);           
@@ -55,14 +56,14 @@ class EndpointEntityProvider {
                 method: entityJson.method,
                 snippets: snippets
             }
-            fullRes = await this.context.apiPost(`/projects/${projectId}/endpoints`, endpoint);
+            fullRes = await this.context.apiPost(`/projects/${projectId}/endpoints`, endpoint, this.token);
             response = fullRes.data.result;
 
             response.redirect = `/console/projects/${projectId}`;
             return response;
 
           case 'edit':
-            fullRes = await this.context.apiPatch(`/projects/${projectId}/endpoints/${entityId}`, entityBody);
+            fullRes = await this.context.apiPatch(`/projects/${projectId}/endpoints/${entityId}`, entityBody, this.token);
             response = fullRes.data.result;
 
             response.redirect = `/console/projects/${projectId}`;

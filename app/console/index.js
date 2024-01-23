@@ -83,7 +83,7 @@ function editGet(context) {
 	return async(req, res, next) => {
 		try {
 			const entityType = req.query.entity;
-			const entityProvider = createEntityProvider(context, entityType);
+			const entityProvider = createEntityProvider(context, entityType, req.cookies.token);
 			const entityId = req.query.id;
 			const body = entityId ? (await entityProvider.provideEditEntityBody(entityId)) : (await entityProvider.provideCreateEntityBody());
 
@@ -103,7 +103,7 @@ function editPost(context) {
 	return async(req, res, next) => {
 		try {
             const entityType = req.query.entity;
-            const entityProvider = createEntityProvider(context, entityType);
+            const entityProvider = createEntityProvider(context, entityType, req.cookies.token);
             const entityBody = req.body.code;
             const result = await entityProvider.prepareEntityBodyAndSave(entityBody, req.query);
 

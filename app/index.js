@@ -56,12 +56,23 @@ class Application {
 	}
 
 	initHelpers() {
-		this.localUrl = `http://0.0.0.0:${this.config.port}/api/v1`;
-		this.apiGet = (url) => {
-			return axios.get(`${this.localUrl}${url}`);
+		function headersWithAuth(headers, token) {
+			if (token) {
+				headers['Authorization'] = `Bearer ${token}`;
+			} 
+			return headers;
 		}
 
-		this.apiPost = (url, data) => {
+		this.localUrl = `http://0.0.0.0:${this.config.port}/api/v1`;
+		this.apiGet = (url, token) => {
+			return axios({
+	          method: 'get',
+	          url: `${this.localUrl}${url}`,
+	          headers: headersWithAuth({}, token)
+	        });
+		}
+
+		this.apiPost = (url, data, token) => {
 			const result = axios({
 	          method: 'post',
 	          url: `${this.localUrl}${url}`,
@@ -70,14 +81,14 @@ class Application {
 	          //   user_key_id: 'USER_KEY_ID',
 	          // },
 	          data: data,
-	          headers: {
+	          headers: headersWithAuth({
 	            "Content-type": "application/json; charset=UTF-8"
-	          }
+	          }, token)
 	        });
 			return result;
 		}
 
-		this.apiPatch = (url, data) => {
+		this.apiPatch = (url, data, token) => {
 			const result = axios({
 	          method: 'patch',
 	          url: `${this.localUrl}${url}`,
@@ -86,9 +97,9 @@ class Application {
 	          //   user_key_id: 'USER_KEY_ID',
 	          // },
 	          data: data,
-	          headers: {
+	          headers: headersWithAuth({
 	            "Content-type": "application/json; charset=UTF-8"
-	          }
+	          }, token)
 	        });
 			return result;
 		}
