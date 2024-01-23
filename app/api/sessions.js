@@ -57,24 +57,25 @@ class SessionMiddleware {
         }
     }
 
-    fetchSessionById() {
+    fetchSessionByToken() {
         return async(req, res, next) => {
-            // try {
-            //     const project = await this.projectRepository.fetchProjectById(req.params.id);
-            //     if (!project) {
-            //         const err = new Error('Not found');
-            //         err.status = 400;
-            //         return next(err)
-            //     }
-            //     res.send(utils.wrapResult(project));
-            // }
-            // catch(err) {
-            //     next(err);
-            // }  
+            try {
+                const token = req.params.token;
+                const session = await this.sessionRepository.fetchSessionByToken(token);
+                if (!session) {
+                    const err = new Error('Not found');
+                    err.status = 400;
+                    return next(err)
+                }
+                res.send(utils.wrapResult(session));
+            }
+            catch(err) {
+                next(err);
+            }  
         }
     }
 
-    deleteSession() {
+    deleteSessionByToken() {
         return async(req, res, next) => {
             // try {
             //     await this.projectRepository.deleteProjectById(req.params.id);

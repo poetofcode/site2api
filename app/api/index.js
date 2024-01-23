@@ -29,8 +29,8 @@ function initRoutes(router, context) {
 
 	router.post('/sessions', sessionMiddleware.createSession());
 	router.get('/sessions', sessionMiddleware.fetchSessions());
-	router.get('/sessions/:token', sessionMiddleware.fetchSessionById());
-	router.delete('/sessions/:token', sessionMiddleware.deleteSession());
+	router.get('/sessions/:token', sessionMiddleware.fetchSessionByToken());
+	router.delete('/sessions/:token', sessionMiddleware.deleteSessionByToken());
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {

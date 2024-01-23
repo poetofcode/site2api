@@ -24,25 +24,14 @@ class SessionRepository {
         return sessions;
     }
 
-    async fetchSessionById(projectId) {
-        // const endpointCollection = this.db.collection("endpoints");
-        // const projectCollection = this.db.collection('projects');
-        // const project = await projectCollection.findOne({ _id : new ObjectId(projectId)});
-
-        // if (project) {
-        //     const endpointsByItem = await endpointCollection.find({ projectId: project._id }).toArray();
-        //     project.endpoints = endpointsByItem;
-        //     return project;
-        // }
-
-        // return null;
+    async fetchSessionByToken(token) {
+        const session = await this.sessionCollection.findOne({ token : token });
+        return session;
     }
 
-    async deleteSession(projectId) {
-        // // TODO возможно нужно удалять в будущем связанные эндпойнты
-        // const projectCollection = this.db.collection('projects');
-        // const result = await projectCollection.deleteOne({ _id : new ObjectId(projectId)});
-        // return result;
+    async deleteSessionToken(token) {
+        const result = await this.sessionCollection.deleteOne({ token : token });
+        return result;
     }
 
 }

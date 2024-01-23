@@ -3,8 +3,41 @@ const ProjectMiddleware = require('./projects.js').ProjectMiddleware;
 const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
 const AuthMiddleware = require('./auth.js').AuthMiddleware;
 const createEntityProvider = require('./provider').createEntityProvider;
+const cookieParser = require('cookie-parser');
 
 function initRoutes(router, context) {
+	router.use(async function (req, res, next) {
+		const token = req.cookies.token;
+
+		if (!token && req.path === '/login') {
+			return next();
+		}
+		if (!token && req.path !== '/login') {
+			return res.redirect('/console/login');
+		}
+
+		try {
+			const result = (await context.apiGet(`/sessions/${token}`)).data.result;
+			if (result) {
+				if (req.path === '/login') {
+					return res.redirect('/console');
+				} else {
+					return next();
+				}
+			}
+
+		} catch (err) {
+			if (err.response.status == 400) {
+				res.clearCookie('token');
+				return res.redirect('/console/login');
+			} else {
+				return next(err);
+			}
+		}
+
+		next();
+	});
+
 	const projectMiddleware = new ProjectMiddleware(context);
 	const endpointMiddleware = new EndpointMiddleware(context);
 	const snippetMiddleware = new SnippetMiddleware(context);
