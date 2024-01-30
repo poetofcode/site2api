@@ -1,6 +1,7 @@
 const ObjectId = require("mongodb").ObjectId;
 const repository = require('../repository');
 const { utils } = require('../utils');
+var fs = require('fs');
 
 class DbExportMiddleware {
 
@@ -27,7 +28,7 @@ class DbExportMiddleware {
 			    	endpoints: endpoints,
 			    	snippets: snippets
 			    }));
-			    
+
 			} catch (err) {
 				next(err);
 			}
@@ -38,28 +39,53 @@ class DbExportMiddleware {
 		return async (req, res, next) => {
 		    const db = req.app.locals.db;
     		const projectCollection = db.collection('projects');
+    		const endpointCollection = db.collection('endpoints');
+    		const snippetCollection = db.collection('snippets');
 
-    		const dbExported = [
-			    {
-			      _id: new ObjectId("6526eb50eb906e64f9b2ad01"),
-			      name: "Rutracker",
-			      baseUrl: "rutracker"
-			    },
-			    {
-			      _id: new ObjectId("65324b488885b76805b850ae"),
-			      name: "Example",
-			      baseUrl: "sluts"
-			    }
-			  ];
+    		const dbExported = this.mockData();
 
 			// TODO try
 
+			const projects = dbExported.result.projects.map((item) => {
+				item._id = new ObjectId(item._id);
+				return item;
+			});
+
+			const endpoints = dbExported.result.endpoints.map((item) => {
+				item._id = new ObjectId(item._id);
+				item.projectId = new ObjectId(item.projectId);
+				item.snippets = item.snippets.map((x) => {
+					return new ObjectId(x);
+				});
+				return item;
+			});
+
+			const snippets = dbExported.result.snippets.map((item) => {
+				item._id = new ObjectId(item._id);
+				return item;
+			});
+
 			await projectCollection.deleteMany({});
+			await endpointCollection.deleteMany({});
+			await snippetCollection.deleteMany({});
 
-			const inserted = await projectCollection.insertMany(dbExported);
+			const insertedProjects = await projectCollection.insertMany(projects);
+			const insertedEndpoints = await endpointCollection.insertMany(endpoints);
+			const insertedSnippets = await snippetCollection.insertMany(snippets);
 
-			res.send(inserted);
+			// const inserted = { todo: "impl" };
+			res.send({
+				resProjects: insertedProjects,
+				resEndpoints: insertedEndpoints,
+				resSnippets: insertedSnippets
+			});
 		}
+	}
+
+	mockData() {
+		// const data = ""
+		const data = JSON.parse(fs.readFileSync('db.json', 'utf8'));
+		return data;
 	}
 
 }

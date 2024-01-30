@@ -1,0 +1,77 @@
+{
+  "result": {
+    "projects": [
+      {
+        "_id": "6526eb50eb906e64f9b2ad01",
+        "name": "Sample1",
+        "baseUrl": "sample1"
+      },
+      {
+        "_id": "65324b488885b76805b850ae",
+        "name": "Sample2",
+        "baseUrl": "sample2"
+      }
+    ],
+    "endpoints": [
+      {
+        "_id": "65296c48c185f981111a2b84",
+        "projectId": "6526eb50eb906e64f9b2ad01",
+        "url": "topics",
+        "snippets": [
+          "65290b804272c9b1b912ff04"
+        ],
+        "method": "get"
+      },
+      {
+        "_id": "652c524f952586a883d981c3",
+        "projectId": "6526eb50eb906e64f9b2ad01",
+        "url": "topics/:id",
+        "snippets": [
+          "652c51fa952586a883d981c2"
+        ],
+        "method": "get"
+      },
+      {
+        "_id": "65324c678885b76805b850b0",
+        "projectId": "65324b488885b76805b850ae",
+        "url": "list",
+        "snippets": [
+          "65324bf98885b76805b850af"
+        ],
+        "method": "get"
+      },
+      {
+        "_id": "6532bc059439ebe9462ff630",
+        "projectId": "6526eb50eb906e64f9b2ad01",
+        "url": "login",
+        "snippets": [
+          "6532bba99439ebe9462ff62f"
+        ],
+        "method": "get"
+      },
+      {
+        "_id": "653527652cf6efb3620514bd",
+        "projectId": "6526eb50eb906e64f9b2ad01",
+        "url": "search",
+        "snippets": [
+          "653526f12cf6efb3620514bc"
+        ],
+        "method": "get"
+      }
+    ],
+    "snippets": [
+      {
+        "_id": "6529178a4272c9b1b912ff05",
+        "code": "function process(input, done) {\r\n\tdone(null, \"Hello world!\");\r\n}\r\n"
+      },
+      {
+        "_id": "65aa9df8b53b1a9bc951019b",
+        "code": "async function process(input) {\n    \n    return {\n        result: \"ALL OK\"\n    }\n}"
+      },
+      {
+        "_id": "65afb1e4e86fdca253cd45ee",
+        "code": "// TODO"
+      }
+    ]
+  }
+}
