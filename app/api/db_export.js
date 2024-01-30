@@ -12,33 +12,25 @@ class DbExportMiddleware {
 
 	exportDb() {
 		return async(req, res, next) => {
-			/*
-		    try {
-		        const projects = await this.projectRepository.fetchProjectsAll();
-		        res.send(utils.wrapResult(projects));
-		    }
-		    catch(err) {
-		    	next(err);
-		    } 
-		    */ 
-		    const db = req.app.locals.db;
-    		const projectCollection = db.collection('projects');
-			const projects = await projectCollection.find({}).toArray();
+			try {
+			    const db = req.app.locals.db;
+	    		const projectCollection = db.collection('projects');
+	    		const endpointCollection = db.collection('endpoints');
+	    		const snippetCollection = db.collection('snippets');
 
-    		const endpointCollection = db.collection('endpoints');
-			const endpoints = await endpointCollection.find({}).toArray();
+				const projects = await projectCollection.find({}).toArray();
+				const endpoints = await endpointCollection.find({}).toArray();
+				const snippets = await snippetCollection.find({}).toArray();
 
-    		const snippetCollection = db.collection('snippets');
-			const snippets = await snippetCollection.find({}).toArray();
-
-		    res.send({
-		    	projects: projects.map((item) => {
-		    		// delete item['_id'];
-		    		return item;
-		    	}),
-		    	endpoints: endpoints,
-		    	snippets: snippets
-		    });
+			    res.send(utils.wrapResult({
+			    	projects: projects,
+			    	endpoints: endpoints,
+			    	snippets: snippets
+			    }));
+			    
+			} catch (err) {
+				next(err);
+			}
 		}
 	}
 
