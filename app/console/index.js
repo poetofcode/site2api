@@ -91,7 +91,8 @@ function editGet(context) {
 				title: body.title,
 				entity : { 
 					code: JSON.stringify(body.code, null, 4) 
-				}
+				},
+				extra: body.extra
 			});
 		} catch(err) {
 			next(err);

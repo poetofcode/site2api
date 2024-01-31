@@ -9,7 +9,6 @@ class DbExportMiddleware {
         this.context = context;
     }
 
-
 	exportDb() {
 		return async(req, res, next) => {
 			try {
@@ -72,7 +71,6 @@ class DbExportMiddleware {
 			const insertedEndpoints = await endpointCollection.insertMany(endpoints);
 			const insertedSnippets = await snippetCollection.insertMany(snippets);
 
-			// const inserted = { todo: "impl" };
 			res.send({
 				resProjects: insertedProjects,
 				resEndpoints: insertedEndpoints,
@@ -80,12 +78,6 @@ class DbExportMiddleware {
 			});
 		}
 	}
-
-	// mockData() {
-	// 	// const data = ""
-	// 	const data = JSON.parse(fs.readFileSync('db.json', 'utf8'));
-	// 	return data;
-	// }
 
 }
 

@@ -21,7 +21,8 @@ class DbExportEntityProvider {
                 todo: 'ToDo'
                 // name: found.name,
                 // baseUrl: found.baseUrl
-            }
+            },
+            extra: "<a href=\"#\">Скачать резервный бэкап</a>"
         };
     }
 
