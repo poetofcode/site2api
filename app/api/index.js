@@ -15,6 +15,7 @@ function initRoutes(router, context) {
 
 	const sessionRepository = new repository.SessionRepository(context);
 
+	/*
 	router.use(async function (req, res, next) {
 		const authHeader = req.header('Authorization');
 
@@ -36,7 +37,8 @@ function initRoutes(router, context) {
 
 		res.status(400).send(utils.wrapError(new Error('Not authorized')));
 	});
-
+	*/
+	
 	router.get('/projects', projectMiddleware.fetchProjects());
 	router.get('/projects/:id', projectMiddleware.fetchProjectById());
 	router.post('/projects', projectMiddleware.createProject());
@@ -55,7 +57,7 @@ function initRoutes(router, context) {
 	router.get('/endpoints/:id', endpointMiddleware.fetchEndpointById());
 
 	router.get('/exportdb', dbExportMiddleware.exportDb());
-	router.get('/importdb', dbExportMiddleware.importDb());
+	router.post('/importdb', dbExportMiddleware.importDb());
 
 	router.post('/sessions', sessionMiddleware.createSession());
 	router.get('/sessions', sessionMiddleware.fetchSessions());

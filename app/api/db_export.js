@@ -7,7 +7,6 @@ class DbExportMiddleware {
 
     constructor(context) {
         this.context = context;
-        // this.sessionRepository = new repository.SessionRepository(context);
     }
 
 
@@ -42,16 +41,16 @@ class DbExportMiddleware {
     		const endpointCollection = db.collection('endpoints');
     		const snippetCollection = db.collection('snippets');
 
-    		const dbExported = this.mockData();
+			const dbExported = {
+				entity: req.body
+			}
 
-			// TODO try
-
-			const projects = dbExported.result.projects.map((item) => {
+			const projects = dbExported.entity.projects.map((item) => {
 				item._id = new ObjectId(item._id);
 				return item;
 			});
 
-			const endpoints = dbExported.result.endpoints.map((item) => {
+			const endpoints = dbExported.entity.endpoints.map((item) => {
 				item._id = new ObjectId(item._id);
 				item.projectId = new ObjectId(item.projectId);
 				item.snippets = item.snippets.map((x) => {
@@ -60,7 +59,7 @@ class DbExportMiddleware {
 				return item;
 			});
 
-			const snippets = dbExported.result.snippets.map((item) => {
+			const snippets = dbExported.entity.snippets.map((item) => {
 				item._id = new ObjectId(item._id);
 				return item;
 			});
@@ -82,11 +81,11 @@ class DbExportMiddleware {
 		}
 	}
 
-	mockData() {
-		// const data = ""
-		const data = JSON.parse(fs.readFileSync('db.json', 'utf8'));
-		return data;
-	}
+	// mockData() {
+	// 	// const data = ""
+	// 	const data = JSON.parse(fs.readFileSync('db.json', 'utf8'));
+	// 	return data;
+	// }
 
 }
 
