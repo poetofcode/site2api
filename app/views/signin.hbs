@@ -1,0 +1,20 @@
+<div class="wrapper">
+	<h2>Авторизация</h2>
+	<form method="POST" action="/console/login">
+		<div class="form-field">
+			<input type="username" placeholder="Логин" name="username" required />
+		</div>
+		<div class="form-field">
+			<input type="password" placeholder="Пароль" name="password" required /> 
+		</div>
+		<div class="form-field">
+			<button class="btn" type="submit">Войти</button>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	{{#if authError}}
+		showToast('Неверные логин или пароль', true);
+	{{/if}}
+</script>

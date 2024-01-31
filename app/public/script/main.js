@@ -32,3 +32,9 @@ function showToast(msg, isError) {
 	  onClick: function(){} // Callback after click
 	}).showToast();
 }
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}

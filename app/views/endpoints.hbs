@@ -61,6 +61,7 @@
         fetch(`/api/v1/endpoints/${id}`, {
             method: 'DELETE',
             headers: {
+              'Authorization': `Bearer ${getCookie('token')}`,
               'Accept': 'application/json',
               'Content-Type': 'application/json'
             },
