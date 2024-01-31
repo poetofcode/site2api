@@ -35,47 +35,54 @@ class DbExportMiddleware {
 
 	importDb() {
 		return async (req, res, next) => {
-		    const db = req.app.locals.db;
-    		const projectCollection = db.collection('projects');
-    		const endpointCollection = db.collection('endpoints');
-    		const snippetCollection = db.collection('snippets');
+			try {
+			    const db = req.app.locals.db;
+	    		const projectCollection = db.collection('projects');
+	    		const endpointCollection = db.collection('endpoints');
+	    		const snippetCollection = db.collection('snippets');
 
-			const dbExported = {
-				entity: req.body
-			}
+				const dbExported = {
+					entity: req.body
+				}
 
-			const projects = dbExported.entity.projects.map((item) => {
-				item._id = new ObjectId(item._id);
-				return item;
-			});
-
-			const endpoints = dbExported.entity.endpoints.map((item) => {
-				item._id = new ObjectId(item._id);
-				item.projectId = new ObjectId(item.projectId);
-				item.snippets = item.snippets.map((x) => {
-					return new ObjectId(x);
+				const projects = dbExported.entity.projects.map((item) => {
+					item._id = new ObjectId(item._id);
+					return item;
 				});
-				return item;
-			});
 
-			const snippets = dbExported.entity.snippets.map((item) => {
-				item._id = new ObjectId(item._id);
-				return item;
-			});
+				const endpoints = dbExported.entity.endpoints.map((item) => {
+					item._id = new ObjectId(item._id);
+					item.projectId = new ObjectId(item.projectId);
+					item.snippets = item.snippets.map((x) => {
+						return new ObjectId(x);
+					});
+					return item;
+				});
 
-			await projectCollection.deleteMany({});
-			await endpointCollection.deleteMany({});
-			await snippetCollection.deleteMany({});
+				const snippets = dbExported.entity.snippets.map((item) => {
+					item._id = new ObjectId(item._id);
+					return item;
+				});
 
-			const insertedProjects = await projectCollection.insertMany(projects);
-			const insertedEndpoints = await endpointCollection.insertMany(endpoints);
-			const insertedSnippets = await snippetCollection.insertMany(snippets);
+				await projectCollection.deleteMany({});
+				await endpointCollection.deleteMany({});
+				await snippetCollection.deleteMany({});
 
-			res.send({
-				resProjects: insertedProjects,
-				resEndpoints: insertedEndpoints,
-				resSnippets: insertedSnippets
-			});
+				const insertedProjects = await projectCollection.insertMany(projects);
+				const insertedEndpoints = await endpointCollection.insertMany(endpoints);
+				const insertedSnippets = await snippetCollection.insertMany(snippets);
+
+				res.send(utils.wrapResult({
+					result: {
+						resProjects: insertedProjects,
+						resEndpoints: insertedEndpoints,
+						resSnippets: insertedSnippets
+					}
+				}));
+
+			} catch (err) {
+				next(err);
+			}
 		}
 	}
 
