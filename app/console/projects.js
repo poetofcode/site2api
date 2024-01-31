@@ -7,7 +7,7 @@ class ProjectMiddleware {
 	list() {
 		return async(req, res, next) => {
 			try {
-				const projects = (await this.context.apiGet('/projects')).data.result;
+				const projects = (await this.context.apiGet('/projects', req.cookies.token)).data.result;
 				res.render("projects.hbs", { projects: projects });
 			} catch(err) {
 				next(err);

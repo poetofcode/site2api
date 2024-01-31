@@ -7,9 +7,9 @@ class SnippetMiddleware {
 	details() {
 		return async(req, res, next) => {
 			try {
+				const token = req.cookies.token;
 				const snippetId = req.params.snippetId;
-				console.log(`snippetId: ${snippetId}`);
-				const snippet = (await this.context.apiGet(`/snippets/${snippetId}`)).data.result;
+				const snippet = (await this.context.apiGet(`/snippets/${snippetId}`, token)).data.result;
 				res.render("snippet_edit.hbs", { snippet : snippet });
 			} catch(err) {
 				next(err);

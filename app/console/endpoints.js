@@ -7,9 +7,10 @@ class EndpointMiddleware {
 	list() {
 		return async(req, res, next) => {
 			try {
+				const token = req.cookies.token;
 				const projectId = req.params.projectId;
-				const endpoints = (await this.context.apiGet(`/projects/${projectId}/endpoints`)).data.result;
-				const project = (await this.context.apiGet(`/projects/${projectId}`)).data.result;
+				const endpoints = (await this.context.apiGet(`/projects/${projectId}/endpoints`, token)).data.result;
+				const project = (await this.context.apiGet(`/projects/${projectId}`, token)).data.result;
 				res.render("endpoints.hbs", { endpoints: endpoints, project: project });
 			} catch(err) {
 				next(err);

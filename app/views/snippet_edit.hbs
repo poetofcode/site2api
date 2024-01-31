@@ -47,6 +47,7 @@
         fetch("/api/v1/snippets/{{this.snippet._id}}", {
             method: 'PATCH',
             headers: {
+              'Authorization': `Bearer ${getCookie('token')}`,
               'Accept': 'application/json',
               'Content-Type': 'application/json'
             },

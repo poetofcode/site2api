@@ -13,14 +13,62 @@
 	<script type="text/javascript" src="/script/main.js"></script>
 </head>
 <body>
-    <div class="sidenav">
-      <a href="/console">Проекты</a>
-      <a href="#">Консоль</a>
-      <a href="#">Импорт БД</a>
-      <a href="#">Помощь</a>
-    </div>
+
+    {{#if isLogin}}
+    {{else}}
+        <div class="sidenav">
+          <a href="/console">Проекты</a>
+          <a href="#">Консоль</a>
+          <a href="#">Импорт БД</a>
+          <a href="#">Помощь</a>
+          <a href="#" class="menu-logout">Выход</a>
+        </div>
+    {{/if}}
 
     {{{body}}}
+
+    <script type="text/javascript">
+      function logout() {
+          console.log(`Logout...`)
+
+            fetch(`/api/v1/sessions/${getCookie('token')}`, {
+                method: 'DELETE',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+                response
+                    .json()
+                    .then(data => {
+                        if (data.result) {
+                            window.location.href = "/console/login";
+                            return;
+                        }
+                        if (!data.result) {
+                            showToast(data.error, true);
+                        }
+                        console.log(JSON.stringify(data));
+                    })
+                    .catch(err => {
+                        showToast(err.message, true);
+                        console.log(err);
+                    });
+            })
+            .catch(err => {
+                showToast(err.message, true);
+                console.log(err);
+            });
+      }
+
+      $('.menu-logout').click(function(e) {
+        e.preventDefault();
+        if (confirm(`Уверены, что хотите выйти из аккаунта?`)) {
+          logout();
+        } 
+      });
+    </script>
 
 </body>
 </html>
