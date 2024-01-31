@@ -14,14 +14,10 @@ class DbExportEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
-        // const found = (await this.context.apiGet(`/projects/${entityId}`, this.token)).data.result;
+        const found = (await this.context.apiGet(`/exportdb`, this.token)).data.result;
         return {
             title: "DbExport/Import",
-            code: {
-                todo: 'ToDo'
-                // name: found.name,
-                // baseUrl: found.baseUrl
-            },
+            code: found,
             extra: "<a href=\"#\">Скачать резервный бэкап</a>"
         };
     }
