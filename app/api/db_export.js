@@ -13,28 +13,60 @@ class DbExportMiddleware {
 		return async(req, res, next) => {
 			try {
 			    const db = req.app.locals.db;
-	    		const projectCollection = db.collection('projects');
-	    		const endpointCollection = db.collection('endpoints');
-	    		const snippetCollection = db.collection('snippets');
-
-				const projects = await projectCollection.find({}).toArray();
-				const endpoints = await endpointCollection.find({}).toArray();
-				const snippets = await snippetCollection.find({}).toArray();
-
-			    res.send(utils.wrapResult({
-			    	projects: projects,
-			    	endpoints: endpoints,
-			    	snippets: snippets
-			    }));
-
+			    res.send(utils.wrapResult(await this.getCurrentDbExport(db)));
 			} catch (err) {
 				next(err);
 			}
 		}
 	}
 
+	async getCurrentDbExport(db) {
+		const projectCollection = db.collection('projects');
+		const endpointCollection = db.collection('endpoints');
+		const snippetCollection = db.collection('snippets');
+
+		const projects = await projectCollection.find({}).toArray();
+		const endpoints = await endpointCollection.find({}).toArray();
+		const snippets = await snippetCollection.find({}).toArray();
+
+	    return {
+	    	projects: projects,
+	    	endpoints: endpoints,
+	    	snippets: snippets
+	    };
+	}
+
+	createBackup() {
+		return async (req, res, next) => {
+		    const db = req.app.locals.db;
+		    try {
+			    const dbExport = await this.getCurrentDbExport(db);
+				fs.writeFileSync('./app/db_backup/db_backup.json', JSON.stringify(dbExport));
+				res.send(utils.wrapResult({ result: "Ok" }));
+			} catch (err) {
+				next(err);
+			}
+		}
+	}
+
+	fetchBackup() {
+		return async (req, res, next) => {
+
+		}
+	}
+
 	importDb() {
 		return async (req, res, next) => {
+		    try {
+			    const dbExport = await this.getCurrentDbExport(db);
+				fs.writeFileSync('./app/db_backup/db_backup.json', JSON.stringify(dbExport));
+				console.log("Backup created OK");
+			} catch (err) {
+				console.log("Backup creation ERROR:");
+				console.log(err);
+				// Бэкапип DB, но не останавливаем работу в случае эксепшена
+			}
+
 			try {
 			    const db = req.app.locals.db;
 	    		const projectCollection = db.collection('projects');

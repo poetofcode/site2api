@@ -14,11 +14,14 @@ class DbExportEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
+        const makeBackup = this.makeLink("#", "Сделать бэкап", "modern-button", "height: 30px; padding: 7px 20px") 
+        const openBackup = this.makeLink("/console/edit?entity=exportdb&action=view", "Открыть бэкап") 
+        const downloadBackup = this.makeLink("/console/download_backup", "Скачать бэкап") 
         const found = (await this.context.apiGet(`/exportdb`, this.token)).data.result;
         return {
             title: "DbExport/Import",
             code: found,
-            extra: "<a href=\"#\">Скачать резервный бэкап</a>"
+            extra: makeBackup + '&nbsp;&nbsp;' + openBackup + '&nbsp;&nbsp;' + downloadBackup
         };
     }
 
@@ -36,6 +39,10 @@ class DbExportEntityProvider {
         }
 
         throw new Error(`Not found '${action}' action`)
+    }
+
+    makeLink(href, text, clazz, styles) {
+        return `<a class="${clazz}" href="${href}" style="${styles}">${text}</a>`
     }
 
 }

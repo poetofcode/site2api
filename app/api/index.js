@@ -38,7 +38,7 @@ function initRoutes(router, context) {
 		res.status(400).send(utils.wrapError(new Error('Not authorized')));
 	});
 	*/
-	
+
 	router.get('/projects', projectMiddleware.fetchProjects());
 	router.get('/projects/:id', projectMiddleware.fetchProjectById());
 	router.post('/projects', projectMiddleware.createProject());
@@ -58,6 +58,7 @@ function initRoutes(router, context) {
 
 	router.get('/exportdb', dbExportMiddleware.exportDb());
 	router.post('/importdb', dbExportMiddleware.importDb());
+	router.post('/backupdb', dbExportMiddleware.createBackup());
 
 	router.post('/sessions', sessionMiddleware.createSession());
 	router.get('/sessions', sessionMiddleware.fetchSessions());
