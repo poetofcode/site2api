@@ -7,15 +7,18 @@ class DbExportEntityProvider {
 
 
     async provideCreateEntityBody() {
+        const found = (await this.context.apiGet(`/backupdb`, this.token)).data.result;
+        const downloadBackup = this.makeLink("/console/download_backup", "Скачать бэкап") 
         return {
             title: "DbExport/Import",
-            code: "No found 'create' action"
+            code: found,
+            extra: "<span>Это последний бэкап базы данных</span>" + '&nbsp;&nbsp;' + downloadBackup
         };
     }
 
     async provideEditEntityBody(entityId) {
         const makeBackup = this.makeLink("#", "Сделать бэкап", "modern-button", "height: 30px; padding: 7px 20px") 
-        const openBackup = this.makeLink("/console/edit?entity=exportdb&action=view", "Открыть бэкап") 
+        const openBackup = this.makeLink("/console/edit?entity=dbexport&action=view", "Открыть бэкап") 
         const downloadBackup = this.makeLink("/console/download_backup", "Скачать бэкап") 
         const found = (await this.context.apiGet(`/exportdb`, this.token)).data.result;
         return {

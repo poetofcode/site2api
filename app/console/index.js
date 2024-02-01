@@ -111,7 +111,7 @@ function editPost(context) {
             return res.status(200).send(result);
 		} catch (err) {
 			console.log(err);
-			res.status(err.response.status).send(err.response.data)
+			next(err);
 		}
 	}
 }

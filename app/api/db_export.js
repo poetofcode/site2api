@@ -53,7 +53,7 @@ class DbExportMiddleware {
 		return async (req, res, next) => {
 		    try {
 			    const dbExport = fs.readFileSync('./app/db_backup/db_backup.json', 'utf8');
-				res.send(utils.wrapResult({ result: JSON.parse(dbExport) }));
+				res.send(utils.wrapResult(JSON.parse(dbExport)));
 			} catch (err) {
 				next(err);
 			}
