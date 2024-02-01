@@ -59,6 +59,7 @@ function initRoutes(router, context) {
 	router.get('/exportdb', dbExportMiddleware.exportDb());
 	router.post('/importdb', dbExportMiddleware.importDb());
 	router.post('/backupdb', dbExportMiddleware.createBackup());
+	router.get('/backupdb', dbExportMiddleware.fetchBackup());
 
 	router.post('/sessions', sessionMiddleware.createSession());
 	router.get('/sessions', sessionMiddleware.fetchSessions());
