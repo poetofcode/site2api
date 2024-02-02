@@ -8,6 +8,7 @@ const expressHbs = require("express-handlebars");
 const hbs = require("hbs");
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
+const util = require('util');
 
 const app = express();
 
@@ -15,6 +16,7 @@ class Application {
 
 	constructor() {
 		this.context = this;
+		collectStdout();
 	}
 
 	async start(config) {
@@ -110,5 +112,13 @@ class Application {
 	}
 }
 
+function collectStdout() {
+	global.logDump = ''
+	process.stdout._orig_write = process.stdout.write;
+	process.stdout.write = (data) => {
+	  global.logDump += data.toString();
+	  process.stdout._orig_write(data);
+	}
+}
 
 exports.app = new Application();
