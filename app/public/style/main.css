@@ -154,3 +154,30 @@ pre {
   color: white !important;
   margin-top: 10px;
 }
+
+
+.logdump {
+   font-family: "courier new", courier, monospace;
+   font-size: 16px;
+   font-weight: 600;
+}
+
+.logdump .colorNum32 {
+	color: Green;
+}
+
+.logdump .colorNum36 {
+	color: Blue;
+}
+
+.logdump .colorNum90 {
+	color: Gray;
+}
+
+.logdump .colorNum31 {
+	color: Red;
+}
+
+.logdump .colorNum33 {
+	color: Yellow;
+}
