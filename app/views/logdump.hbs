@@ -40,6 +40,8 @@
                     }
                     if (data.result) {
                         $('.logdump').html(data.result.result);
+                        var objDiv = document.getElementById("editor");
+						objDiv.scrollTop = objDiv.scrollHeight;
                     } else {
                         showToast(data.error, true);
                     }
@@ -64,4 +66,9 @@
     */
 
     fetchDump();
+
+    setInterval(function () {
+    	fetchDump();
+    }, 1000);
+
 </script>
