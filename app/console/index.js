@@ -2,6 +2,7 @@ const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
 const ProjectMiddleware = require('./projects.js').ProjectMiddleware;
 const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
 const AuthMiddleware = require('./auth.js').AuthMiddleware;
+const LogdumpMiddleware = require('./logdump.js').LogdumpMiddleware;
 const createEntityProvider = require('./provider').createEntityProvider;
 const cookieParser = require('cookie-parser');
 
@@ -42,6 +43,7 @@ function initRoutes(router, context) {
 	const endpointMiddleware = new EndpointMiddleware(context);
 	const snippetMiddleware = new SnippetMiddleware(context);
 	const authMiddleware = new AuthMiddleware(context);
+	const logdumpMiddleware = new LogdumpMiddleware(context);
 
 	router.use(function (req, res, next) {
 	    switch (req.path) {
@@ -68,6 +70,8 @@ function initRoutes(router, context) {
 	// ...вот методы на редактирование сущностей
 	router.get('/edit', editGet(context));
 	router.post('/edit', editPost(context));
+
+	router.get('/logdump', logdumpMiddleware.logdumpPage());
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {
