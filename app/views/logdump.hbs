@@ -20,3 +20,48 @@
     <!-- <div id="editor"></div> -->
     <pre id="editor" class="logdump" style="">{{{this.logDump}}}</div>
 </div>
+
+<script>
+    function fetchDump() {
+        fetch('/console/logdump', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            response
+                .json()
+                .then(data => {
+                    if (data.result && data.redirect) {
+                        window.location.replace(data.redirect);
+                        return;
+                    }
+                    if (data.result) {
+                        $('.logdump').html(data.result.result);
+                    } else {
+                        showToast(data.error, true);
+                    }
+                    console.log(JSON.stringify(data));
+                })
+                .catch(err => {
+                    showToast(err.message, true);
+                    console.log(err);
+                });
+        })
+        .catch(err => {
+            showToast(err.message, true);
+            console.log(err);
+        });
+    }
+
+	/*
+    $('#save').click((e) => {
+        submitChanges();
+        e.preventDefault();
+    })
+    */
+
+    fetchDump();
+</script>
