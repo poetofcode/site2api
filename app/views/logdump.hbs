@@ -11,7 +11,7 @@
             <tr>
                 <td>LogDump</td>
                 <td><span class="italic"></span></td>
-                <td><a id="save" class="modern-button" href="#" style="padding: 6px 32px;">Сохранить</a></td>
+                <td><a id="resume" class="modern-button modern-button-yellow hidden" href="#" style="padding: 6px 32px;">Продолжить</a><a id="pause" class="modern-button modern-button-blue" href="#" style="padding: 6px 32px;">Остановить</a></td>
             </tr>
         </tbody>
     </table>
@@ -22,6 +22,18 @@
 </div>
 
 <script>
+	let isPaused = true;
+
+	function updateView() {
+		if (isPaused) {
+			$('#pause').addClass('hidden');
+			$('#resume').removeClass('hidden');
+		} else {
+			$('#pause').removeClass('hidden');
+			$('#resume').addClass('hidden');
+		}
+	}
+
     function fetchDump() {
         fetch('/console/logdump', {
             method: 'POST',
@@ -58,16 +70,25 @@
         });
     }
 
-	/*
-    $('#save').click((e) => {
-        submitChanges();
+    $('#pause').click((e) => {
+        isPaused = true;
+        updateView();
         e.preventDefault();
-    })
-    */
+    });
 
+    $('#resume').click((e) => {
+        isPaused = false;
+        updateView();
+        e.preventDefault();
+    });
+
+    // First time
+    updateView();
     fetchDump();
 
+	// Start timer 
     setInterval(function () {
+    	if (isPaused) return;
     	fetchDump();
     }, 1000);
 

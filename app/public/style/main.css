@@ -23,6 +23,10 @@ a:hover {
 	font-weight: bold;
 }
 
+.hidden {
+	display: none !important; 
+}
+
 html, body {
 	background: #4587A7;
 	padding-bottom: 40px;
@@ -86,6 +90,15 @@ tr:nth-child(odd) {background: #FFF}
 	text-decoration: none !important;
 }
 
+.modern-button-yellow {
+	background-color: yellow;
+	color: black !important;
+}
+
+.modern-button-blue {
+	background-color: blue;
+	/* color: black !important; */
+}
 
 pre {
 	color: #AAA;
