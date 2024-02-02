@@ -72,6 +72,7 @@ function initRoutes(router, context) {
 	router.post('/edit', editPost(context));
 
 	router.get('/logdump', logdumpMiddleware.logdumpPage());
+	router.post('/logdump', logdumpMiddleware.logdumpRaw());
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {

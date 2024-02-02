@@ -1,4 +1,4 @@
-// const cookieParser = require('cookie-parser');
+const { utils } = require('../utils');
 
 class LogdumpMiddleware {
 
@@ -9,18 +9,28 @@ class LogdumpMiddleware {
 	logdumpPage() {
 		return async(req, res, next) => {
 			try {
-				res.render("logdump.hbs", {
-					logDump: this.prepareDump(global.logDump)
-				});
+				res.render("logdump.hbs", { logDump: '' });
 			} catch(err) {
 				next(err);
 			}
 		}
 	}
 
+	logdumpRaw() {
+		return async(req, res, next) => {
+			try {
+				const dump = this.prepareDump(global.logDump);
+				const result = utils.wrapResult({ result: dump });
+				res.send(result);
+			} catch(err) {
+				next(err);
+			}
+		}		
+	}
+
 	prepareDump(dump) {
 		dump = dump.replaceAll('[39m', '</span>');
-		
+
 		// Regular expression to match "[39m" or similar patterns
 		var regex = /\[\d+m/g;
 
