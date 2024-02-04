@@ -4,6 +4,11 @@ const expressWinston = require('express-winston');
 const { createLogger, format, transports } = winston;
 const { combine, timestamp, label, printf } = format;
 
+const ignoreList = [
+  '/console/logdump',
+  '/api/v1/sessions/'
+];
+
 function logger() {
 	const myFormat = printf(({ level, message, timestamp }) => {
 		const parsedDate = new Date(timestamp);
@@ -25,7 +30,15 @@ function logger() {
       msg: "{{req.method}} {{req.url}} {{res.responseTime}}ms",
       expressFormat: true,
       colorize: true,
-      ignoreRoute: function (req, res) { return false; }
+      ignoreRoute: function (req, res) { 
+        let result = false;      
+        ignoreList.forEach((item) => {
+          if (req.url.includes(item)) {
+            result = true;
+          };
+        });
+        return result; 
+      }
     })
 }
 
