@@ -43,13 +43,9 @@ function getActualToken() {
 
 
 function initRoutes(router, context) {
-	console.log("SiteRouter init, context:");
-	console.log(context);
 	const salt = "12345"	// TODO брать из конфига
 
 	router.use(async function (req, res, next) {
-		console.log('req.path = ' + req.path);
-
 		if (req.path === '/token') {
 			return next();
 		}
@@ -61,9 +57,6 @@ function initRoutes(router, context) {
 
 		const clientTotalHash = authHeader.replace('Bearer ', '');
 		const serverTotalHash = totalHash(`/site${req.path}`, getActualToken(), salt);
-
-		console.log('clientTotalHash: ' + clientTotalHash);
-		console.log('serverTotalHash: ' + serverTotalHash);
 
 		if (clientTotalHash.toUpperCase() === serverTotalHash.toUpperCase()) {
 			return next();
