@@ -2,6 +2,8 @@ const repository = require('../repository')
 const axios = require('axios');
 const cheerio = require("cheerio");
 const iconv = require('iconv-lite');
+const crypto = require('crypto');
+const { utils } = require('../utils');
 
 const codeLayout = `(function() {
 	{{snippet}}
@@ -11,12 +13,38 @@ const codeLayout = `(function() {
 
 // Система роутинга
 let routes = [];
+let tokenInfo = createToken();
+
+const TOKEN_LIFETIME_SECONDS = 10;
+
+function createToken() {
+	return {
+		token: crypto.randomUUID(),
+		time: new Date()
+	}
+};
+
+function isTokenExpired() {
+	// TODO 
+	return false;
+}
+
+function getActualToken() {
+	// TODO обновлять, если просрочен
+	return tokenInfo.token;
+}
 
 
 function initRoutes(router, context) {
 	router.use(async function (req, res, next) {
-		// TODO
+		//
+		// TODO сравнивать дайджесты токенов: серверного и присланного с клиента
+		//
 		next();
+	});
+
+	router.post("/token", async (req, res, next) => {
+		res.send(utils.wrapResult({ result: getActualToken() }));
 	});
 
 	router.use(parser(context));
