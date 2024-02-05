@@ -43,11 +43,33 @@ function getActualToken() {
 
 
 function initRoutes(router, context) {
+	console.log("SiteRouter init, context:");
+	console.log(context);
+	const salt = "12345"	// TODO брать из конфига
+
 	router.use(async function (req, res, next) {
-		//
-		// TODO сравнивать дайджесты токенов: серверного и присланного с клиента
-		//
-		next();
+		console.log('req.path = ' + req.path);
+
+		if (req.path === '/token') {
+			return next();
+		}
+
+		const authHeader = req.header('Authorization');
+		if (!authHeader) {
+			return res.status(401).send(utils.wrapError(new Error('Not authorized')));
+		}
+
+		const clientTotalHash = authHeader.replace('Bearer ', '');
+		const serverTotalHash = totalHash(`/site${req.path}`, getActualToken(), salt);
+
+		console.log('clientTotalHash: ' + clientTotalHash);
+		console.log('serverTotalHash: ' + serverTotalHash);
+
+		if (clientTotalHash.toUpperCase() === serverTotalHash.toUpperCase()) {
+			return next();
+		}
+
+		res.status(401).send(utils.wrapError(new Error('Not authorized')));
 	});
 
 	router.post("/token", async (req, res, next) => {
@@ -57,6 +79,16 @@ function initRoutes(router, context) {
 	router.use(parser(context));
 }
 
+
+function hash(arg) {
+	var shasum = crypto.createHash('sha1');
+	shasum.update(arg);
+	return shasum.digest('hex').toString();
+}
+
+function totalHash(path, token, salt) {
+	return hash(hash(path) + hash(token) + hash(salt));
+}
 
 function matchRoute(path) {
     for (const route of routes) {

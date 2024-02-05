@@ -32,7 +32,7 @@ function initRoutes(router, context) {
             }
 		}
 
-		res.status(400).send(utils.wrapError(new Error('Not authorized')));
+		res.status(401).send(utils.wrapError(new Error('Not authorized')));
 	});
 
 	router.get('/projects', projectMiddleware.fetchProjects());
