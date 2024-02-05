@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const util = require('util');
 
 const app = express();
+const LOG_LIMIT_LENGTH = 50000;
 
 class Application {
 
@@ -117,6 +118,9 @@ function collectStdout() {
 	process.stdout._orig_write = process.stdout.write;
 	process.stdout.write = (data) => {
 	  global.logDump += data.toString();
+	  if (global.logDump.length > LOG_LIMIT_LENGTH) {
+	  	global.logDump = global.logDump.slice(global.logDump.length - LOG_LIMIT_LENGTH);
+	  }
 	  process.stdout._orig_write(data);
 	}
 }
