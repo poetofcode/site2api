@@ -1,0 +1,95 @@
+<div id="snippet-layout">
+    <div id="snippet-header">
+        <table style="width: 100%">
+        <colgroup>
+           <col span="1" style="width: 20%;">
+           <col span="1" style="width: 70%;">
+           <col span="1" style="width: 10%;">
+        </colgroup>
+        
+        <tbody>
+            <tr>
+                <td>LogDump</td>
+                <td><span class="italic"></span></td>
+                <td><a id="resume" class="modern-button modern-button-yellow hidden" href="#" style="padding: 6px 32px;">Продолжить</a><a id="pause" class="modern-button modern-button-blue" href="#" style="padding: 6px 32px;">Остановить</a></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <!-- <div id="editor"></div> -->
+    <pre id="editor" class="logdump" style="">{{{this.logDump}}}</div>
+</div>
+
+<script>
+	let isPaused = false;
+
+	function updateView() {
+		if (isPaused) {
+			$('#pause').addClass('hidden');
+			$('#resume').removeClass('hidden');
+		} else {
+			$('#pause').removeClass('hidden');
+			$('#resume').addClass('hidden');
+		}
+	}
+
+    function fetchDump() {
+        fetch('/console/logdump', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            response
+                .json()
+                .then(data => {
+                    if (data.result && data.redirect) {
+                        window.location.replace(data.redirect);
+                        return;
+                    }
+                    if (data.result) {
+                        $('.logdump').html(data.result.result);
+                        var objDiv = document.getElementById("editor");
+						objDiv.scrollTop = objDiv.scrollHeight;
+                    } else {
+                        showToast(data.error, true);
+                    }
+                    console.log(JSON.stringify(data));
+                })
+                .catch(err => {
+                    showToast(err.message, true);
+                    console.log(err);
+                });
+        })
+        .catch(err => {
+            showToast(err.message, true);
+            console.log(err);
+        });
+    }
+
+    $('#pause').click((e) => {
+        isPaused = true;
+        updateView();
+        e.preventDefault();
+    });
+
+    $('#resume').click((e) => {
+        isPaused = false;
+        updateView();
+        e.preventDefault();
+    });
+
+    // First time
+    updateView();
+    fetchDump();
+
+	// Start timer 
+    setInterval(function () {
+    	if (isPaused) return;
+    	fetchDump();
+    }, 1000);
+
+</script>

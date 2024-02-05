@@ -72,7 +72,7 @@ function parser(context) {
 				registerRoute(method, itemPath, item);
 			});
 
-			console.log(routes);
+			// console.log(routes);
 
 		    const [path, queryString] = reqPath.split('?');
 		    const routeMatch = matchRoute(path);
@@ -80,8 +80,8 @@ function parser(context) {
 	    		console.log("No found matching route");
 	    		return next();	
 		    } else {
-		    	console.log('Found route');
-		    	console.log(routeMatch);
+		    	// console.log('Found route');
+		    	// console.log(routeMatch);
 		    }
 
 	        const parsedParams = routeMatch.params;
