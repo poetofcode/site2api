@@ -15,23 +15,27 @@ const codeLayout = `(function() {
 let routes = [];
 let tokenInfo;
 
-const TOKEN_LIFETIME_SECONDS = 10;
+const TOKEN_LIFETIME_SECONDS = 15 * 60;
 
 function createToken() {
 	return {
 		token: crypto.randomUUID(),
-		createdAt: new Date()
+		createdAt: (new Date()).getTime()
 	}
 };
 
 function isTokenExpired() {
-	// TODO 
-	return false;
+	const currentDate = new Date();
+	const timestamp = currentDate.getTime();
+	const diffSeconds = (timestamp - tokenInfo.createdAt) / 1000;
+	return diffSeconds > TOKEN_LIFETIME_SECONDS;
 }
 
 function getActualToken() {
-	// TODO обновлять, если просрочен
 	if (!tokenInfo || !tokenInfo.token || !tokenInfo.createdAt) {
+		tokenInfo = createToken();
+	}
+	if (isTokenExpired()) {
 		tokenInfo = createToken();
 	}
 	return tokenInfo.token;
@@ -47,7 +51,7 @@ function initRoutes(router, context) {
 	});
 
 	router.post("/token", async (req, res, next) => {
-		res.send(utils.wrapResult({ result: getActualToken() }));
+		res.send(utils.wrapResult({ token: getActualToken() }));
 	});
 
 	router.use(parser(context));
