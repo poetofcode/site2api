@@ -5,8 +5,12 @@ const { createLogger, format, transports } = winston;
 const { combine, timestamp, label, printf } = format;
 
 const ignoreList = [
-  '/console/logdump',
-  '/api/v1/sessions/'
+  // '/console/logdump',
+  '/api/v1/sessions/',
+  '/style/',
+  '/lib/',
+  '/script/',
+  '/console',
 ];
 
 function logger() {
