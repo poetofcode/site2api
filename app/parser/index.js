@@ -13,14 +13,14 @@ const codeLayout = `(function() {
 
 // Система роутинга
 let routes = [];
-let tokenInfo = createToken();
+let tokenInfo;
 
 const TOKEN_LIFETIME_SECONDS = 10;
 
 function createToken() {
 	return {
 		token: crypto.randomUUID(),
-		time: new Date()
+		createdAt: new Date()
 	}
 };
 
@@ -31,6 +31,9 @@ function isTokenExpired() {
 
 function getActualToken() {
 	// TODO обновлять, если просрочен
+	if (!tokenInfo || !tokenInfo.token || !tokenInfo.createdAt) {
+		tokenInfo = createToken();
+	}
 	return tokenInfo.token;
 }
 
