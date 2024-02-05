@@ -12,6 +12,17 @@ const codeLayout = `(function() {
 // Система роутинга
 let routes = [];
 
+
+function initRoutes(router, context) {
+	router.use(async function (req, res, next) {
+		// TODO
+		next();
+	});
+
+	router.use(parser(context));
+}
+
+
 function matchRoute(path) {
     for (const route of routes) {
         const match = route.pattern.exec(path);
@@ -55,6 +66,7 @@ function registerRoute(method, path, endpoint) {
         method
     });
 }
+
 
 function parser(context) {
 	return async(req, res, next) => {
@@ -111,4 +123,5 @@ function parser(context) {
     }
 }
 
-exports.parser = parser;
+// exports.parser = parser;
+exports.initRoutes = initRoutes;

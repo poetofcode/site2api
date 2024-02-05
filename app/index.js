@@ -3,7 +3,8 @@ const { MongoClient } = require('mongodb');
 const apiMiddleware = require('./api')
 const { utils } = require('./utils');
 const consoleMiddleware = require('./console');
-const parser = require('./parser').parser;
+// const parser = require('./parser').parser;
+const siteMiddleware = require('./parser');
 const expressHbs = require("express-handlebars");
 const hbs = require("hbs");
 const axios = require('axios');
@@ -33,6 +34,7 @@ class Application {
 	initAPI() {
 		const apiRouter = express.Router();
 		const consoleRouter = express.Router();
+		const siteRouter = express.Router();
 		const viewsPath = `${__dirname}/views`;
 
 		app.set("views", viewsPath);
@@ -50,7 +52,9 @@ class Application {
 		app.use(express.urlencoded());
 		app.use(cookieParser());
 
-		app.use('/site/*', parser(this.context));
+		siteMiddleware.initRoutes(siteRouter, this.context);
+		app.use('/site', siteRouter);
+		// app.use('/site/*', parser(this.context));
 		apiMiddleware.initRoutes(apiRouter, this.context);
 		app.use('/api/v1', apiRouter);
 		consoleMiddleware.initRoutes(consoleRouter, this.context);
