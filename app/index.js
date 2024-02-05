@@ -3,7 +3,6 @@ const { MongoClient } = require('mongodb');
 const apiMiddleware = require('./api')
 const { utils } = require('./utils');
 const consoleMiddleware = require('./console');
-// const parser = require('./parser').parser;
 const siteMiddleware = require('./parser');
 const expressHbs = require("express-handlebars");
 const hbs = require("hbs");
@@ -54,7 +53,6 @@ class Application {
 
 		siteMiddleware.initRoutes(siteRouter, this.context);
 		app.use('/site', siteRouter);
-		// app.use('/site/*', parser(this.context));
 		apiMiddleware.initRoutes(apiRouter, this.context);
 		app.use('/api/v1', apiRouter);
 		consoleMiddleware.initRoutes(consoleRouter, this.context);
