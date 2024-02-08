@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
-    "dev": "nodemon --legacy-watch ."
+    "dev": "nodemon --legacy-watch  --ignore ./app/config/ --ignore ./app/db_backup ."
   },
   "keywords": [
     "api",

@@ -10,7 +10,7 @@ class ConfigMiddleware {
     editConfig() {
         return async(req, res, next) => {
             try {
-                const config = req.body.config;
+                const config = req.body;
                 this.context.configRepository.saveConfig(config);
                 res.send(utils.wrapResult({ result: "ok" }));
             }
