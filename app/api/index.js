@@ -2,6 +2,7 @@ const ProjectMiddleware = require('./projects.js').ProjectMiddleware;
 const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
 const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
 const SessionMiddleware = require('./sessions.js').SessionMiddleware;
+const ConfigMiddleware = require('./config.js').ConfigMiddleware;
 const repository = require('../repository');
 const { utils } = require('../utils');
 
@@ -10,6 +11,7 @@ function initRoutes(router, context) {
 	const snippetMiddleware = new SnippetMiddleware(context);
 	const endpointMiddleware = new EndpointMiddleware(context);
 	const sessionMiddleware = new SessionMiddleware(context);
+	const configMiddleware = new ConfigMiddleware(context);
 
 	const sessionRepository = new repository.SessionRepository(context);
 
@@ -56,6 +58,9 @@ function initRoutes(router, context) {
 	router.get('/sessions', sessionMiddleware.fetchSessions());
 	router.get('/sessions/:token', sessionMiddleware.fetchSessionByToken());
 	router.delete('/sessions/:token', sessionMiddleware.deleteSessionByToken());
+
+	router.get('/config', configMiddleware.fetchConfig());
+	router.post('/config', configMiddleware.editConfig());
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {

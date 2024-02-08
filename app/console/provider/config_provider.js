@@ -14,12 +14,10 @@ class ConfigEntityProvider {
     }
 
     async provideEditEntityBody(entityId) {
-        // const found = (await this.context.apiGet(`/projects/${entityId}`, this.token)).data.result;
+        const found = (await this.context.apiGet(`/config`, this.token)).data.result;
         return {
             title: "Настройки",
-            code: {
-                todo: "ToDo"
-            }
+            code: found
         };
     }
 
