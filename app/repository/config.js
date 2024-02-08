@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 class ConfigRepository {
 
     constructor(context) {
@@ -14,7 +16,7 @@ class ConfigRepository {
             this.config.debug_key = config.debug_key;
             fs.writeFileSync('./app/config/config.json', JSON.stringify(this.config));
         } catch (err) {
-            console.error("Error saving config", err);
+            console.log("Error saving config", err);
         }
     }
     
@@ -26,7 +28,7 @@ class ConfigRepository {
             this.config.debug_key = config.debug_key;
             return this.config;
         } catch (err) {
-            console.error("Error saving config", err);
+            console.log("Error saving config", err);
             return this.config;
         }
     }

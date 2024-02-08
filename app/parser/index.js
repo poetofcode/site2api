@@ -50,6 +50,11 @@ function initRoutes(router, context) {
 			return next();
 		}
 
+		const config = context.configRepository.fetchConfig();
+		if (config.debug_enabled && req.query["debug_key"] === config.debug_key) {
+			return next();
+		}
+
 		const authHeader = req.header('Authorization');
 		if (!authHeader) {
 			return res.status(401).send(utils.wrapError(new Error('Not authorized')));
