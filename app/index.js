@@ -9,6 +9,7 @@ const hbs = require("hbs");
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
 const util = require('util');
+const repository = require('./repository');
 
 const app = express();
 const LOG_LIMIT_LENGTH = 50000;
@@ -17,6 +18,7 @@ class Application {
 
 	constructor() {
 		this.context = this;
+		this.configRepository = new repository.ConfigRepository(this.context);
 		collectStdout();
 	}
 
