@@ -12,19 +12,19 @@ class DbExportEntityProvider {
         return {
             title: "DbExport/Import",
             code: found,
-            extra: "<span>Это последний бэкап базы данных</span>" + '&nbsp;&nbsp;' + downloadBackup
+            extra: "<span>Это последний бэкап базы данных</span>" /* + '&nbsp;&nbsp;' + downloadBackup */
         };
     }
 
     async provideEditEntityBody(entityId) {
         const makeBackup = this.makeLink("#", "Сделать бэкап", "modern-button", "height: 30px; padding: 7px 20px") 
-        const openBackup = this.makeLink("/console/edit?entity=dbexport&action=view", "Открыть бэкап") 
+        const openBackup = this.makeLink("/console/edit?entity=dbexport&action=view", "Открыть последний бэкап") 
         const downloadBackup = this.makeLink("/console/download_backup", "Скачать бэкап") 
         const found = (await this.context.apiGet(`/exportdb`, this.token)).data.result;
         return {
             title: "DbExport/Import",
             code: found,
-            extra: makeBackup + '&nbsp;&nbsp;' + openBackup + '&nbsp;&nbsp;' + downloadBackup
+            extra: /*makeBackup + '&nbsp;&nbsp;' +*/ openBackup /* + '&nbsp;&nbsp;' + downloadBackup */
         };
     }
 
