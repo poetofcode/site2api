@@ -5,6 +5,8 @@ class ConfigRepository {
     constructor(context) {
         // Дефолтный конфиг
         this.config = {
+            login: "admin",
+            password: "admin",
             debug_enabled: false,
             debug_key: "secretkey"
         }
@@ -14,6 +16,8 @@ class ConfigRepository {
         try {
             this.config.debug_enabled = config.debug_enabled;
             this.config.debug_key = config.debug_key;
+            this.config.login = config.login;
+            this.config.password = config.password;
             fs.writeFileSync('./app/config/config.json', JSON.stringify(this.config));
         } catch (err) {
             console.log("Error saving config", err);
@@ -24,8 +28,10 @@ class ConfigRepository {
     fetchConfig() {
         try {
             const config = JSON.parse(fs.readFileSync('./app/config/config.json', 'utf8'));
-            this.config.debug_enabled = config.debug_enabled;
-            this.config.debug_key = config.debug_key;
+            this.config.debug_enabled = config.debug_enabled || this.config.debug_enabled;
+            this.config.debug_key = config.debug_key || this.config.debug_key;
+            this.config.login = config.login || this.config.login;
+            this.config.password = config.password || this.config.password;
             return this.config;
         } catch (err) {
             console.log("Error saving config", err);
