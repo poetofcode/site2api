@@ -12,7 +12,7 @@ const util = require('util');
 const repository = require('./repository');
 
 const app = express();
-const LOG_LIMIT_LENGTH = 50000;
+const LOG_LIMIT_LENGTH = 100000;
 
 class Application {
 
