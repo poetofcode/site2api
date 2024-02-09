@@ -96,7 +96,8 @@ function editGet(context) {
 				title: body.title,
 				entity : { 
 					code: JSON.stringify(body.code, null, 4) 
-				}
+				},
+				extra: body.extra
 			});
 		} catch(err) {
 			next(err);
@@ -115,7 +116,7 @@ function editPost(context) {
             return res.status(200).send(result);
 		} catch (err) {
 			console.log(err);
-			res.status(err.response.status).send(err.response.data)
+			next(err);
 		}
 	}
 }

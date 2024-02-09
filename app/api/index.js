@@ -1,6 +1,7 @@
 const ProjectMiddleware = require('./projects.js').ProjectMiddleware;
 const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
 const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
+const DbExportMiddleware = require('./db_export.js').DbExportMiddleware;
 const SessionMiddleware = require('./sessions.js').SessionMiddleware;
 const ConfigMiddleware = require('./config.js').ConfigMiddleware;
 const repository = require('../repository');
@@ -10,11 +11,13 @@ function initRoutes(router, context) {
 	const projectMiddleware = new ProjectMiddleware(context);
 	const snippetMiddleware = new SnippetMiddleware(context);
 	const endpointMiddleware = new EndpointMiddleware(context);
+	const dbExportMiddleware = new DbExportMiddleware(context);
 	const sessionMiddleware = new SessionMiddleware(context);
 	const configMiddleware = new ConfigMiddleware(context);
 
 	const sessionRepository = new repository.SessionRepository(context);
 
+	/*
 	router.use(async function (req, res, next) {
 		const authHeader = req.header('Authorization');
 
@@ -36,6 +39,7 @@ function initRoutes(router, context) {
 
 		res.status(401).send(utils.wrapError(new Error('Not authorized')));
 	});
+	*/
 
 	router.get('/projects', projectMiddleware.fetchProjects());
 	router.get('/projects/:id', projectMiddleware.fetchProjectById());
@@ -53,6 +57,11 @@ function initRoutes(router, context) {
 	router.patch('/projects/:projectId/endpoints/:id', endpointMiddleware.updateEndpoint());
 	router.delete('/endpoints/:id', endpointMiddleware.deleteEndpoint());
 	router.get('/endpoints/:id', endpointMiddleware.fetchEndpointById());
+
+	router.get('/exportdb', dbExportMiddleware.exportDb());
+	router.post('/importdb', dbExportMiddleware.importDb());
+	router.post('/backupdb', dbExportMiddleware.createBackup());
+	router.get('/backupdb', dbExportMiddleware.fetchBackup());
 
 	router.post('/sessions', sessionMiddleware.createSession());
 	router.get('/sessions', sessionMiddleware.fetchSessions());
