@@ -62,6 +62,7 @@ class DbExportMiddleware {
 
 	importDb() {
 		return async (req, res, next) => {
+			const db = req.app.locals.db;
 		    try {
 			    const dbExport = await this.getCurrentDbExport(db);
 				fs.writeFileSync('./app/db_backup/db_backup.json', JSON.stringify(dbExport));
