@@ -68,9 +68,19 @@ function buildError(status, description, code) {
   return err;
 }
 
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
 exports.utils = {
 	logger: logger,
   wrapResult: wrapResult,
   wrapError: wrapError,
-  buildError: buildError
+  buildError: buildError,
+  escapeHtml: escapeHtml
 }

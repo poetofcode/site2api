@@ -43,32 +43,18 @@
             }
         })
         .then(response => {
-            response
-                .json()
-                .then(data => {
-                    if (data.result && data.redirect) {
-                        window.location.replace(data.redirect);
-                        return;
-                    }
-                    if (data.result) {
-                        $('.logdump').html(data.result.result);
-                        var objDiv = document.getElementById("editor");
-						objDiv.scrollTop = objDiv.scrollHeight;
-                    } else {
-                        showToast(data.error, true);
-                    }
-                    console.log(JSON.stringify(data));
-                })
-                .catch(err => {
-                    showToast(err.message, true);
-                    console.log(err);
-                });
+            return response.text()
+        })
+        .then(dump => {
+            document.getElementById("editor").innerHTML = dump;
+            var objDiv = document.getElementById("editor");
+			objDiv.scrollTop = objDiv.scrollHeight;
         })
         .catch(err => {
             showToast(err.message, true);
             console.log(err);
         });
-    }
+    };
 
     $('#pause').click((e) => {
         isPaused = true;
