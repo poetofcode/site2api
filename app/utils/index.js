@@ -4,6 +4,15 @@ const expressWinston = require('express-winston');
 const { createLogger, format, transports } = winston;
 const { combine, timestamp, label, printf } = format;
 
+const ignoreList = [
+  // '/console/logdump',
+  '/api/v1/sessions/',
+  '/style/',
+  '/lib/',
+  '/script/',
+  '/console',
+];
+
 function logger() {
 	const myFormat = printf(({ level, message, timestamp }) => {
 		const parsedDate = new Date(timestamp);
@@ -25,7 +34,15 @@ function logger() {
       msg: "{{req.method}} {{req.url}} {{res.responseTime}}ms",
       expressFormat: true,
       colorize: true,
-      ignoreRoute: function (req, res) { return false; }
+      ignoreRoute: function (req, res) { 
+        let result = false;      
+        ignoreList.forEach((item) => {
+          if (req.url.includes(item)) {
+            result = true;
+          };
+        });
+        return result; 
+      }
     })
 }
 
@@ -51,9 +68,19 @@ function buildError(status, description, code) {
   return err;
 }
 
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
 exports.utils = {
 	logger: logger,
   wrapResult: wrapResult,
   wrapError: wrapError,
-  buildError: buildError
+  buildError: buildError,
+  escapeHtml: escapeHtml
 }

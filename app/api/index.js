@@ -3,6 +3,7 @@ const SnippetMiddleware = require('./snippets.js').SnippetMiddleware;
 const EndpointMiddleware = require('./endpoints.js').EndpointMiddleware;
 const DbExportMiddleware = require('./db_export.js').DbExportMiddleware;
 const SessionMiddleware = require('./sessions.js').SessionMiddleware;
+const ConfigMiddleware = require('./config.js').ConfigMiddleware;
 const repository = require('../repository');
 const { utils } = require('../utils');
 
@@ -12,6 +13,7 @@ function initRoutes(router, context) {
 	const endpointMiddleware = new EndpointMiddleware(context);
 	const dbExportMiddleware = new DbExportMiddleware(context);
 	const sessionMiddleware = new SessionMiddleware(context);
+	const configMiddleware = new ConfigMiddleware(context);
 
 	const sessionRepository = new repository.SessionRepository(context);
 
@@ -35,7 +37,7 @@ function initRoutes(router, context) {
             }
 		}
 
-		res.status(400).send(utils.wrapError(new Error('Not authorized')));
+		res.status(401).send(utils.wrapError(new Error('Not authorized')));
 	});
 	*/
 
@@ -65,6 +67,9 @@ function initRoutes(router, context) {
 	router.get('/sessions', sessionMiddleware.fetchSessions());
 	router.get('/sessions/:token', sessionMiddleware.fetchSessionByToken());
 	router.delete('/sessions/:token', sessionMiddleware.deleteSessionByToken());
+
+	router.get('/config', configMiddleware.fetchConfig());
+	router.post('/config', configMiddleware.editConfig());
 
 	router.use((err, req, res, next) => {
 	  if (res.headersSent) {

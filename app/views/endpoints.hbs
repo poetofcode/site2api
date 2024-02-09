@@ -20,7 +20,7 @@
 		        <tr id="{{this._id}}">
 		        	<td><span class="mono">{{this._id}}</span></td>
 					<td><span class="mono" style="text-transform: uppercase;">{{this.method}}</span></td>
-		    		<td><span class="mono">/site/{{this.project.baseUrl}}</span><span class="mono bold">/{{this.url}}</span> <a target=”_blank” href="/site/{{this.project.baseUrl}}/{{this.url}}">→</a></td>
+		    		<td><span class="mono">/site/{{this.project.baseUrl}}</span><span class="mono bold">/{{this.url}}</span> <a target=”_blank” href="/site/{{this.project.baseUrl}}/{{this.url}}?debug_key={{@root.config.debug_key}}">→</a></td>
 		    		<td><a class="edit-endpoint" href="/console/edit?entity=endpoint&action=edit&project={{project._id}}&id={{this._id}}">ред</a></td>
 		    		<td><a class="remove-endpoint" href="#">x</a></td>
 		        </tr>

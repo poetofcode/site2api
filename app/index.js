@@ -3,18 +3,23 @@ const { MongoClient } = require('mongodb');
 const apiMiddleware = require('./api')
 const { utils } = require('./utils');
 const consoleMiddleware = require('./console');
-const parser = require('./parser').parser;
+const siteMiddleware = require('./parser');
 const expressHbs = require("express-handlebars");
 const hbs = require("hbs");
 const axios = require('axios');
 const cookieParser = require('cookie-parser');
+const util = require('util');
+const repository = require('./repository');
 
 const app = express();
+const LOG_LIMIT_LENGTH = 100000;
 
 class Application {
 
 	constructor() {
 		this.context = this;
+		this.configRepository = new repository.ConfigRepository(this.context);
+		collectStdout();
 	}
 
 	async start(config) {
@@ -30,6 +35,7 @@ class Application {
 	initAPI() {
 		const apiRouter = express.Router();
 		const consoleRouter = express.Router();
+		const siteRouter = express.Router();
 		const viewsPath = `${__dirname}/views`;
 
 		app.set("views", viewsPath);
@@ -47,7 +53,8 @@ class Application {
 		app.use(express.urlencoded());
 		app.use(cookieParser());
 
-		app.use('/site/*', parser(this.context));
+		siteMiddleware.initRoutes(siteRouter, this.context);
+		app.use('/site', siteRouter);
 		apiMiddleware.initRoutes(apiRouter, this.context);
 		app.use('/api/v1', apiRouter);
 		consoleMiddleware.initRoutes(consoleRouter, this.context);
@@ -110,5 +117,16 @@ class Application {
 	}
 }
 
+function collectStdout() {
+	global.logDump = ''
+	process.stdout._orig_write = process.stdout.write;
+	process.stdout.write = (data) => {
+	  global.logDump += data.toString();
+	  if (global.logDump.length > LOG_LIMIT_LENGTH) {
+	  	global.logDump = global.logDump.slice(global.logDump.length - LOG_LIMIT_LENGTH);
+	  }
+	  process.stdout._orig_write(data);
+	}
+}
 
 exports.app = new Application();
