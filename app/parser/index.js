@@ -2,6 +2,8 @@ const repository = require('../repository')
 const axios = require('axios');
 const cheerio = require("cheerio");
 const iconv = require('iconv-lite');
+const crypto = require('crypto');
+const { utils } = require('../utils');
 
 const codeLayout = `(function() {
 	{{snippet}}
@@ -11,6 +13,80 @@ const codeLayout = `(function() {
 
 // Система роутинга
 let routes = [];
+let tokenInfo;
+
+const TOKEN_LIFETIME_SECONDS = 15 * 60;
+
+function createToken() {
+	return {
+		token: crypto.randomUUID(),
+		createdAt: (new Date()).getTime()
+	}
+};
+
+function isTokenExpired() {
+	const currentDate = new Date();
+	const timestamp = currentDate.getTime();
+	const diffSeconds = (timestamp - tokenInfo.createdAt) / 1000;
+	return diffSeconds > TOKEN_LIFETIME_SECONDS;
+}
+
+function getActualToken() {
+	if (!tokenInfo || !tokenInfo.token || !tokenInfo.createdAt) {
+		tokenInfo = createToken();
+	}
+	if (isTokenExpired()) {
+		tokenInfo = createToken();
+	}
+	return tokenInfo.token;
+}
+
+
+function initRoutes(router, context) {
+	const salt = "12345"	// TODO брать из конфига
+
+	router.use(async function (req, res, next) {
+		if (req.path === '/token') {
+			return next();
+		}
+
+		const config = context.configRepository.fetchConfig();
+		if (config.debug_enabled && req.query["debug_key"] === config.debug_key) {
+			return next();
+		}
+
+		const authHeader = req.header('Authorization');
+		if (!authHeader) {
+			return res.status(401).send(utils.wrapError(new Error('Not authorized')));
+		}
+
+		const clientTotalHash = authHeader.replace('Bearer ', '');
+		const serverTotalHash = totalHash(`/site${req.path}`, getActualToken(), salt);
+
+		if (clientTotalHash.toUpperCase() === serverTotalHash.toUpperCase()) {
+			return next();
+		}
+
+		res.status(401).send(utils.wrapError(new Error('Not authorized')));
+	});
+
+	router.post("/token", async (req, res, next) => {
+		res.send(utils.wrapResult({ token: getActualToken() }));
+	});
+
+	router.use(parser(context));
+}
+
+
+function hash(arg) {
+	var shasum = crypto.createHash('sha1');
+	shasum.update(arg);
+	return shasum.digest('hex').toString();
+}
+
+function totalHash(path, token, salt) {
+	return hash(hash(path) + hash(token) + hash(salt));
+}
 
 function matchRoute(path) {
     for (const route of routes) {
@@ -55,6 +131,7 @@ function registerRoute(method, path, endpoint) {
         method
     });
 }
+
 
 function parser(context) {
 	return async(req, res, next) => {
@@ -111,4 +188,4 @@ function parser(context) {
     }
 }
 
-exports.parser = parser;
+exports.initRoutes = initRoutes;

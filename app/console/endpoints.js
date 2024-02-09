@@ -11,7 +11,12 @@ class EndpointMiddleware {
 				const projectId = req.params.projectId;
 				const endpoints = (await this.context.apiGet(`/projects/${projectId}/endpoints`, token)).data.result;
 				const project = (await this.context.apiGet(`/projects/${projectId}`, token)).data.result;
-				res.render("endpoints.hbs", { endpoints: endpoints, project: project });
+				const config = this.context.configRepository.fetchConfig();
+				res.render("endpoints.hbs", { 
+					endpoints: endpoints, 
+					project: project, 
+					config: config 
+				});
 			} catch(err) {
 				next(err);
 			}

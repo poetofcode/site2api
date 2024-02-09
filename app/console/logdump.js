@@ -20,8 +20,7 @@ class LogdumpMiddleware {
 		return async(req, res, next) => {
 			try {
 				const dump = this.prepareDump(global.logDump);
-				const result = utils.wrapResult({ result: dump });
-				res.send(result);
+				res.send(dump);
 			} catch(err) {
 				next(err);
 			}
@@ -29,6 +28,7 @@ class LogdumpMiddleware {
 	}
 
 	prepareDump(dump) {
+		dump = utils.escapeHtml(dump);
 		dump = dump.replaceAll('[39m', '</span>');
 
 		// Regular expression to match "[39m" or similar patterns
