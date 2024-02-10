@@ -11,11 +11,9 @@ class SessionMiddleware {
 
     createSession() {
         return async(req, res, next) => {
-            //
-            // TODO брать эти поля из конфига (конфиг не должен попасть в GIT)
-            //
-            const refName = "admin";
-            const refPassword = "qwerty123";
+            const config = this.context.configRepository.fetchConfig();
+            const refName = config.login;;
+            const refPassword = config.password;
 
             if(!req.body) {
                 return next(utils.buildError(400, 'Body is empty'))
