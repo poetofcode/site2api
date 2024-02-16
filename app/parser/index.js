@@ -171,9 +171,11 @@ function parser(context) {
 				return eval(wrappedCode);
 			});
 
+			delete found.project._id;
 			let _params = {
 				params: parsedParams,
 				query: parsedQuery,
+				project: found.project,
 			};
 			await Promise.all(snippetFuncs.map(async (func) => {
 				_params.result = await func(_params);
