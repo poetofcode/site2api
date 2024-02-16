@@ -23,9 +23,11 @@ class ProjectMiddleware {
 			if (!baseUrl || baseUrl == 'undefined') {
 				return next(utils.buildError(400, '"baseUrl" is empty'))
 			}
+			const params = req.body.params || {};
 			const project = { 
 				name: name,
-				baseUrl: baseUrl
+				baseUrl: baseUrl,
+				params: params
 			}
 
 		    try{
@@ -57,7 +59,8 @@ class ProjectMiddleware {
 			}
 			const project = { 
 				name: name,
-				baseUrl: baseUrl
+				baseUrl: baseUrl,
+				params: req.body.params
 			}
 
 		    try{
