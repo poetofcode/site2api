@@ -49,7 +49,8 @@ function logger() {
 
 function wrapResult(data) {
   return {
-    result: data
+    result: data,
+    isError: false
   }
 }
 
@@ -66,6 +67,8 @@ function buildError(status, description, code) {
     err.code = code;
   }
   err.status = status;
+  err.description = description;
+  err.isError = true;
   return err;
 }
 

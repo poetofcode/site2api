@@ -137,7 +137,7 @@ function parser(context) {
 	return async(req, res, next) => {
 		const reqPath = req.originalUrl;
 		if (!reqPath.startsWith('/site')) {
-			return next();
+			return res.send(utils.buildError(400, 'Not found route'));
 		}
 		const endpointRepository = new repository.EndpointRepository(context);
 		try {
@@ -155,7 +155,7 @@ function parser(context) {
 		    const routeMatch = matchRoute(path);
 		    if (!routeMatch) {
 	    		console.log("No found matching route");
-	    		return next();	
+	    		return res.send(utils.buildError(400, "No found matching route"));	
 		    } else {
 		    	// console.log('Found route');
 		    	// console.log(routeMatch);
@@ -176,16 +176,25 @@ function parser(context) {
 				params: parsedParams,
 				query: parsedQuery,
 				project: found.project,
+				makeError: (msg, code) => {
+					const resError = new Error(msg);
+					resError.code = code;
+					return resError;
+				}
 			};
 			await Promise.all(snippetFuncs.map(async (func) => {
 				_params.result = await func(_params);
 			}));
 
-			return res.send(_params.result);
+			return res.send(utils.wrapResult(_params.result));
 
 		} catch (err) {
 			console.log(err);
-			return res.status(500).send(err);
+			return res.send(utils.buildError(
+				500, 
+				err.toString() || 'Unknown error',
+				err.code || null)
+			);
 		}
     }
 }
