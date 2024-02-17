@@ -43,14 +43,14 @@ function getActualToken() {
 
 
 function initRoutes(router, context) {
-	const salt = "12345"	// TODO брать из конфига
-
 	router.use(async function (req, res, next) {
 		if (req.path === '/token') {
 			return next();
 		}
 
 		const config = context.configRepository.fetchConfig();
+		const salt = config.api_key;
+
 		if (config.debug_enabled && req.query["debug_key"] === config.debug_key) {
 			return next();
 		}
