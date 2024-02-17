@@ -3,6 +3,7 @@ const expressWinston = require('express-winston');
 
 const { createLogger, format, transports } = winston;
 const { combine, timestamp, label, printf } = format;
+const hbsHelpers = require('./hbs-helpers.js');
 
 const ignoreList = [
   // '/console/logdump',
@@ -82,5 +83,6 @@ exports.utils = {
   wrapResult: wrapResult,
   wrapError: wrapError,
   buildError: buildError,
-  escapeHtml: escapeHtml
+  escapeHtml: escapeHtml,
+  hbsHelpers: hbsHelpers
 }
