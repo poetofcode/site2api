@@ -34,6 +34,7 @@ class ConfigRepository {
             this.config.debug_key = config.debug_key || this.config.debug_key;
             this.config.login = config.login || this.config.login;
             this.config.password = config.password || this.config.password;
+            
             return this.config;
         } catch (err) {
             console.log("Error saving config", err);
