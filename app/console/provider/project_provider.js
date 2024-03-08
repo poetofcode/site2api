@@ -28,7 +28,7 @@ class ProjectEntityProvider {
             code: {
                 name: found.name,
                 baseUrl: found.baseUrl,
-                patams: found.params
+                params: found.params
             }
         };
     }
