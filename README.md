@@ -90,6 +90,18 @@ As can be seen from the config above, it can have the following values: `dev | p
 
 ## Other docker commands
 
+Show running containers:
+
+```
+docker ps -a
+```
+
+Show console log of containers: 
+
+```
+docker logs <container id>
+```
+
 Bring up docker when updating code. Saves cache, but not for code:
 
 ```
