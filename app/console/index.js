@@ -28,7 +28,7 @@ function initRoutes(router, context) {
 			}
 
 		} catch (err) {
-			if (err.response.status == 400) {
+			if (err.response?.status == 400) {
 				res.clearCookie('token');
 				return res.redirect('/console/login');
 			} else {
