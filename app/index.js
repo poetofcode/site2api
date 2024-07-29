@@ -43,7 +43,8 @@ class Application {
 		    {
 		        layoutsDir: `${viewsPath}/layouts`, 
 		        defaultLayout: "layout",
-		        extname: "hbs"
+		        extname: "hbs",
+		        helpers: utils.hbsHelpers
 		    }
 		));
 		app.set("view engine", "hbs");
@@ -62,7 +63,7 @@ class Application {
 		app.use(express.static(`${__dirname}/public`));
 	}
 
-	initHelpers() {
+	initHelpers() {		
 		function headersWithAuth(headers, token) {
 			if (token) {
 				headers['Authorization'] = `Bearer ${token}`;

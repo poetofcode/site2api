@@ -8,7 +8,8 @@ class ConfigRepository {
             login: "admin",
             password: "admin",
             debug_enabled: false,
-            debug_key: "secretkey"
+            debug_key: "secretkey",
+            api_key: "secret-api-key"
         }
     }
 
@@ -18,6 +19,7 @@ class ConfigRepository {
             this.config.debug_key = config.debug_key;
             this.config.login = config.login;
             this.config.password = config.password;
+            this.config.api_key = config.api_key;
             fs.writeFileSync('./app/config/config.json', JSON.stringify(this.config));
         } catch (err) {
             console.log("Error saving config", err);
@@ -32,6 +34,7 @@ class ConfigRepository {
             this.config.debug_key = config.debug_key || this.config.debug_key;
             this.config.login = config.login || this.config.login;
             this.config.password = config.password || this.config.password;
+            
             return this.config;
         } catch (err) {
             console.log("Error saving config", err);

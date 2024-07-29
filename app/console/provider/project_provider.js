@@ -6,7 +6,10 @@ class ProjectEntityProvider {
 
         this.code = {
            name: "NewProject",
-           baseUrl: "misc.com" 
+           baseUrl: "misc",
+           params: {
+            "url": "https://misc.com"
+           }
         }
     }
 
@@ -24,7 +27,8 @@ class ProjectEntityProvider {
             title: "Ред. проект",
             code: {
                 name: found.name,
-                baseUrl: found.baseUrl
+                baseUrl: found.baseUrl,
+                params: found.params
             }
         };
     }

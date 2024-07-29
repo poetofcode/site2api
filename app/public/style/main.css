@@ -15,6 +15,14 @@ a:hover {
 	font-size: 16px;
 }
 
+ul {
+	list-style-type: none;
+}
+
+ul li {
+	margin-top: 8px;
+}
+
 .italic {
 	font-style: italic;
 }
@@ -25,6 +33,10 @@ a:hover {
 
 .hidden {
 	display: none !important; 
+}
+
+.muted {
+	color: gray;
 }
 
 html, body {
