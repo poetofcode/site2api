@@ -4,3 +4,4 @@ package-lock.json
 
 app/db_backup/db_backup.json
 app/config/config.json
+nohup.out
