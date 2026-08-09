@@ -59,14 +59,14 @@ class EndpointEntityProvider {
             fullRes = await this.context.apiPost(`/projects/${projectId}/endpoints`, endpoint, this.token);
             response = fullRes.data.result;
 
-            response.redirect = `/console/projects/${projectId}`;
+            response.redirect = `${this.context.config.subfolder}/console/projects/${projectId}`;
             return response;
 
           case 'edit':
             fullRes = await this.context.apiPatch(`/projects/${projectId}/endpoints/${entityId}`, entityBody, this.token);
             response = fullRes.data.result;
 
-            response.redirect = `/console/projects/${projectId}`;
+            response.redirect = `${this.context.config.subfolder}/console/projects/${projectId}`;
             return response;
         }
 

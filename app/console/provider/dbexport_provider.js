@@ -37,7 +37,7 @@ class DbExportEntityProvider {
           case 'edit':
             fullRes = await this.context.apiPost(`/importdb`, entityBody, this.token);
             response = fullRes.data.result;
-            // response.redirect = `/console/projects/${entityId}`;
+            // response.redirect = `${this.context.config.subfolder}/console/projects/${entityId}`;
             return response;
         }
 

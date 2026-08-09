@@ -3,10 +3,11 @@ const expressWinston = require('express-winston');
 
 const { createLogger, format, transports } = winston;
 const { combine, timestamp, label, printf } = format;
-const hbsHelpers = require('./hbs-helpers.js');
+const hbsHelpers = require('./hbs-helpers.js').hbsHelpers;
+const setContext = require('./hbs-helpers.js').setContext;
 
 const ignoreList = [
-  // '/console/logdump',
+  '/console/logdump',
   '/api/v1/sessions/',
   '/style/',
   '/lib/',
@@ -38,6 +39,7 @@ function logger() {
       ignoreRoute: function (req, res) { 
         let result = false;      
         ignoreList.forEach((item) => {
+          // console.log(`item: ${item}, req.url: ${req.url}`);
           if (req.url.includes(item)) {
             result = true;
           };
@@ -87,5 +89,6 @@ exports.utils = {
   wrapError: wrapError,
   buildError: buildError,
   escapeHtml: escapeHtml,
-  hbsHelpers: hbsHelpers
+  hbsHelpers: hbsHelpers,
+  setContext: setContext
 }

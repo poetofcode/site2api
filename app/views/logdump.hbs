@@ -22,24 +22,25 @@
 </div>
 
 <script>
-	let isPaused = false;
+    let isPaused = false;
 
-	function updateView() {
-		if (isPaused) {
-			$('#pause').addClass('hidden');
-			$('#resume').removeClass('hidden');
-		} else {
-			$('#pause').removeClass('hidden');
-			$('#resume').addClass('hidden');
-		}
-	}
+    function updateView() {
+        if (isPaused) {
+            $('#pause').addClass('hidden');
+            $('#resume').removeClass('hidden');
+        } else {
+            $('#pause').removeClass('hidden');
+            $('#resume').addClass('hidden');
+        }
+    }
 
     function fetchDump() {
-        fetch('/console/logdump', {
+        const apiPath = '{{url "/console/logdump"}}';
+        fetch(apiPath, {
             method: 'POST',
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
         })
         .then(response => {
@@ -48,7 +49,7 @@
         .then(dump => {
             document.getElementById("editor").innerHTML = dump;
             var objDiv = document.getElementById("editor");
-			objDiv.scrollTop = objDiv.scrollHeight;
+            objDiv.scrollTop = objDiv.scrollHeight;
         })
         .catch(err => {
             showToast(err.message, true);
@@ -72,10 +73,10 @@
     updateView();
     fetchDump();
 
-	// Start timer 
+    // Start timer 
     setInterval(function () {
-    	if (isPaused) return;
-    	fetchDump();
+        if (isPaused) return;
+        fetchDump();
     }, 1000);
 
 </script>

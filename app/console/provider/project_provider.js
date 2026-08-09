@@ -42,13 +42,13 @@ class ProjectEntityProvider {
           case 'add':
             fullRes = await this.context.apiPost(`/projects/`, entityBody, this.token);
             response = fullRes.data.result;
-            response.redirect = `/console/projects/${response.result._id}`;
+            response.redirect = `${this.context.config.subfolder}/console/projects/${response.result._id}`;
             return response;
 
           case 'edit':
             fullRes = await this.context.apiPatch(`/projects/${entityId}`, entityBody, this.token);
             response = fullRes.data.result;
-            response.redirect = `/console/projects/${entityId}`;
+            response.redirect = `${this.context.config.subfolder}/console/projects/${entityId}`;
             return response;
         }
 

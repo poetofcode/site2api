@@ -18,10 +18,11 @@
         </tbody>
     </table>
     </div>
-	<div id="editor"></div>
+    <div id="editor"></div>
 </div>
 
-<script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<!-- Используем хелпер static для ACE редактора -->
+<script src="{{static '/lib/ace/ace.js'}}" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setOptions({
@@ -44,12 +45,14 @@
 
     function submitChanges() {
         const newCode = editor.getValue();
-        fetch("/api/v1/snippets/{{this.snippet._id}}", {
+        // Используем apiUrl хелпер для API-запроса
+        const apiPath = '{{apiUrl "/snippets/"}}' + '{{this.snippet._id}}';
+        fetch(apiPath, {
             method: 'PATCH',
             headers: {
-              'Authorization': `Bearer ${getCookie('token')}`,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+                'Authorization': `Bearer ${getCookie('token')}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ code : newCode }),
             })

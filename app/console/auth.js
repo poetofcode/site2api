@@ -25,10 +25,12 @@ class AuthMiddleware {
 	            });
 	            const result = response.data.result;
 				res.cookie('token', result.token);
-				res.redirect('/console');
+				res.redirect(`${this.context.config.subfolder}/console`);
 
 			} catch(err) {
-	            if (err.response.status == 400) {
+				console.log(`err: ${err}`);
+
+	            if (err.response == null || err.response.status == 400) {
 	            	return res.render("signin.hbs", { authError: true });
 	            }
 				next(err);

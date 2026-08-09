@@ -21,7 +21,8 @@
     <div id="editor"></div>
 </div>
 
-<script src="/lib/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<!-- Используем хелпер static для ACE редактора -->
+<script src="{{static '/lib/ace/ace.js'}}" type="text/javascript" charset="utf-8"></script>
 <script>
     var editor = ace.edit("editor");
     editor.setOptions({
@@ -42,17 +43,22 @@
     editor.setValue(htmlDecode(document.getElementById('code-hidden').innerHTML));
     editor.gotoLine(0);
 
-    var currentUrl = window.location.href.substring(window.location.origin.length);
+    // Используем basePath для определения текущего URL
+    var currentUrl = window.location.pathname;
+    // Добавляем query string, если он есть
+    if (window.location.search) {
+        currentUrl += window.location.search;
+    }
     console.log(currentUrl);
 
     function submitChanges() {
         const newCode = editor.getValue();
-        // TODO возможно будем брать урлу из текущей строки браузера:
+        // Используем текущий URL для запроса (он уже содержит basePath)
         fetch(currentUrl, {
             method: 'POST',
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ code : newCode }),
             })
@@ -61,6 +67,10 @@
                     .json()
                     .then(data => {
                         if (data.result && data.redirect) {
+
+                            console.log(`data.redirect: ${data.redirect}`);
+
+                            // Редирект уже содержит правильный путь с basePath
                             window.location.replace(data.redirect);
                             return;
                         }

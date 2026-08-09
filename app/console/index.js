@@ -14,14 +14,14 @@ function initRoutes(router, context) {
 			return next();
 		}
 		if (!token && req.path !== '/login') {
-			return res.redirect('/console/login');
+			return res.redirect(`${context.config.subfolder}/console/login`);
 		}
 
 		try {
 			const result = (await context.apiGet(`/sessions/${token}`)).data.result;
 			if (result) {
 				if (req.path === '/login') {
-					return res.redirect('/console');
+					return res.redirect(`${context.config.subfolder}/console`);
 				} else {
 					return next();
 				}
@@ -30,7 +30,7 @@ function initRoutes(router, context) {
 		} catch (err) {
 			if (err.response?.status == 400) {
 				res.clearCookie('token');
-				return res.redirect('/console/login');
+				return res.redirect(`${context.config.subfolder}/console/login`);
 			} else {
 				return next(err);
 			}

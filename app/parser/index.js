@@ -136,7 +136,7 @@ function registerRoute(method, path, endpoint) {
 function parser(context) {
 	return async(req, res, next) => {
 		const reqPath = req.originalUrl;
-		if (!reqPath.startsWith('/site')) {
+		if (!reqPath.startsWith(`${context.config.subfolder}/site`)) {
 			return res.send(utils.buildError(400, 'Not found route'));
 		}
 		const endpointRepository = new repository.EndpointRepository(context);
@@ -144,7 +144,7 @@ function parser(context) {
 			const endpoints = await endpointRepository.fetchEndpointsAll();
 			routes = [];
 			endpoints.filter((item) => item.project).forEach((item) => {
-				const itemPath = `/site/${item.project.baseUrl}/${item.url}`;
+				const itemPath = `${context.config.subfolder}/site/${item.project.baseUrl}/${item.url}`;
 				const method = item.method.toUpperCase();
 				registerRoute(method, itemPath, item);
 			});

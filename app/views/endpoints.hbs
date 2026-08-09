@@ -1,102 +1,119 @@
 <div class="wrapper">
-	<h2>{{project.name}} : эндпоинты ({{endpoints.length}})</h2>
-	<ul>
-		<li><span class="muted">ID проекта:</span> <span class="mono">{{project._id}}</span></li>
-		<li><span class="muted">Base URL:</span> <span class="mono">{{project.baseUrl}}</span></li>
-		<li><span class="muted">Параметры:</span> <code class="mono">{{{ json project.params }}}</code></li>
-	</ul>
-	<a class="add-endpoint modern-button" href="/console/edit?entity=endpoint&action=add&project={{project._id}}">Добавить эндпоинт</a>
+    <h2>{{project.name}} : эндпоинты ({{endpoints.length}})</h2>
+    <ul>
+        <li><span class="muted">ID проекта:</span> <span class="mono">{{project._id}}</span></li>
+        <li><span class="muted">Base URL:</span> <span class="mono">{{project.baseUrl}}</span></li>
+        <li><span class="muted">Параметры:</span> <code class="mono">{{{ json project.params }}}</code></li>
+    </ul>
+    <a class="add-endpoint modern-button" href="{{url '/console/edit?entity=endpoint&action=add&project=' }}{{project._id}}">Добавить эндпоинт</a>
 </div>
 
 {{#each endpoints}}
-	<div class="wrapper">
-		<table style="width: 100%">
-		    <colgroup>
-		       <col span="1" style="width: 20%;">
-		       <col span="1" style="width: 10%;">
-		       <col span="1" style="width: 70%;">
-		    </colgroup>
-		    
-		    <tbody>
-		        <tr id="{{this._id}}">
-		        	<td><span class="mono">{{this._id}}</span></td>
-					<td><span class="mono" style="text-transform: uppercase;">{{this.method}}</span></td>
-		    		<td><span class="mono">/site/{{this.project.baseUrl}}</span><span class="mono bold">/{{this.url}}</span> <a target=”_blank” href="/site/{{this.project.baseUrl}}/{{this.url}}?debug_key={{@root.config.debug_key}}">→</a></td>
-		    		<td><a class="edit-endpoint" href="/console/edit?entity=endpoint&action=edit&project={{project._id}}&id={{this._id}}">ред</a></td>
-		    		<td><a class="remove-endpoint" href="#">x</a></td>
-		        </tr>
-		    </tbody>
-		</table>
+    <div class="wrapper">
+        <table style="width: 100%">
+            <colgroup>
+               <col span="1" style="width: 20%;">
+               <col span="1" style="width: 10%;">
+               <col span="1" style="width: 70%;">
+            </colgroup>
+            
+            <tbody>
+                <tr id="{{this._id}}">
+                    <td><span class="mono">{{this._id}}</span></td>
+                    <td><span class="mono" style="text-transform: uppercase;">{{this.method}}</span></td>
+                    <td>
+                        <span class="mono">/site/{{this.project.baseUrl}}</span>
+                        <span class="mono bold">/{{this.url}}</span>
+                        <a target="_blank" href="{{url (concat '/site/' this.project.baseUrl '/' this.url)}}?debug_key={{@root.config.debug_key}}">→</a>
+                    </td>
+                    <td><a class="edit-endpoint" href="{{url (concat '/console/edit?entity=endpoint&action=edit&project=' project._id '&id=' this._id)}}">ред</a></td>
+                    <td><a class="remove-endpoint" href="#">x</a></td>
+                </tr>
+            </tbody>
+        </table>
 
-		<br />
+        <br />
 
-		<details>
-			<summary>Сниппетов {{this.snippets.length}}{{#each this.snippets}}&nbsp;<a href="/console/snippets/{{this._id}}">{{this._id}}</a>{{/each}}</summary>
-			{{#each this.snippets}}
-				<div class="snippet">
-					<table style="width: 100%">
-					    <colgroup>
-					       <col span="1" style="width: 20%;">
-					       <col span="1" style="width: 70%;">
-					       <col span="1" style="width: 10%;">
-					    </colgroup>
-					    
-					    <tbody>
-					        <tr>
-					        	<td>{{this._id}}</td>
-								<td><span class="italic">{{this.name}}</span></td>
-					    		<td><a href="/console/snippets/{{this._id}}">Редактировать</a></td>
-					        </tr>
-					    </tbody>
-					</table>
+        <details>
+            <summary>
+                Сниппетов {{this.snippets.length}}
+                {{#each this.snippets}}
+                    &nbsp;<a href="{{url (concat '/console/snippets/' this._id)}}">{{this._id}}</a>
+                {{/each}}
+            </summary>
+            {{#each this.snippets}}
+                <div class="snippet">
+                    <table style="width: 100%">
+                        <colgroup>
+                           <col span="1" style="width: 20%;">
+                           <col span="1" style="width: 70%;">
+                           <col span="1" style="width: 10%;">
+                        </colgroup>
+                        
+                        <tbody>
+                            <tr>
+                                <td>{{this._id}}</td>
+                                <td><span class="italic">{{this.name}}</span></td>
+                                <td><a href="{{url (concat '/console/snippets/' this._id)}}">Редактировать</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-					<pre>{{this.code}}</pre>
-				</div>
-			{{/each}}
-		</details>
-	</div>
+                    <pre>{{this.code}}</pre>
+                </div>
+            {{/each}}
+        </details>
+    </div>
 {{/each}}
 
 <script type="text/javascript">
-	function deleteEndpoint(id) {
-        fetch(`/api/v1/endpoints/${id}`, {
+    function deleteEndpoint(id) {
+        // Используем apiUrl хелпер для API-запроса
+        const apiPath = '{{apiUrl "/endpoints/"}}' + id;
+        
+        const $btn = $(`tr#${id} .remove-endpoint`);
+        $btn.text('...');
+        
+        fetch(apiPath, {
             method: 'DELETE',
             headers: {
-              'Authorization': `Bearer ${getCookie('token')}`,
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
+                'Authorization': `Bearer ${getCookie('token')}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
         })
         .then(response => {
-            response
-                .json()
-                .then(data => {
-                    if (data.result) {
-                        window.location.reload();
-                        return;
-                    }
-                    if (!data.result) {
-                        showToast(data.error, true);
-                    }
-                    console.log(JSON.stringify(data));
-                })
-                .catch(err => {
-                    showToast(err.message, true);
-                    console.log(err);
-                });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.result) {
+                showToast('Эндпоинт удален', false);
+                window.location.reload();
+                return;
+            }
+            if (!data.result) {
+                showToast(data.error || 'Ошибка удаления', true);
+            }
+            console.log(JSON.stringify(data));
         })
         .catch(err => {
-            showToast(err.message, true);
-            console.log(err);
+            showToast('Ошибка: ' + err.message, true);
+            console.error('Delete error:', err);
+        })
+        .finally(() => {
+            $btn.text('x');
         });
-	}
+    }
 
-	$('.remove-endpoint').click(function(e) {
+    $('.remove-endpoint').click(function(e) {
         e.preventDefault();
         var id = $(this).closest('tr').attr('id');
 
         if (confirm(`Уверены, что хотите удалить эндпоинт? (${id})`)) {
-		  deleteEndpoint(id);
-		} 
+            deleteEndpoint(id);
+        } 
     });
 </script>
