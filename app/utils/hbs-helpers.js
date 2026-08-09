@@ -17,10 +17,7 @@ const hbsHelpers = {
 
   url: function(path) {
     const basePath = context.config.subfolder || '';
-    const cleanPath = path && path.startsWith('/') ? path : '/' + path;
-
-    console.log(`url-helper, cleanPath: ${cleanPath}, basePath: ${basePath}, result: ${basePath + cleanPath}`);
-    
+    const cleanPath = path && path.startsWith('/') ? path : '/' + path;    
     return basePath + cleanPath;
   },
 
